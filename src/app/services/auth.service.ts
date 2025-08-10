@@ -45,27 +45,98 @@ export class AuthService {
         private http: HttpClient,
         private router: Router
     ) {
-        this.loadUserFromToken();
+        // Don't call loadUserFromToken here, let the component call it
     }
 
-    private loadUserFromToken(): void {
+    public loadUserFromToken(): void {
         const token = this.getToken();
         if (token) {
+            console.log('Found token in localStorage, checking validity...');
+            
+            // Check if token is expired before making API call
+            if (this.isTokenExpired(token)) {
+                console.warn('Token is expired, clearing auth data');
+                this.clearAuthData();
+                return;
+            }
+
+            console.log('Token is valid, fetching user profile...');
             this.getUserProfile().subscribe({
                 next: (response) => {
+                    console.log('User profile loaded successfully:', response.user.name);
                     this.currentUserSubject.next(response.user);
                     this.isAuthenticatedSubject.next(true);
+                    // Set up token refresh timer
+                    this.setupTokenRefresh(token);
                 },
                 error: (error) => {
                     console.warn('Token validation failed:', error);
                     // Only logout if it's a 401 error (unauthorized)
                     // For other errors (like network issues), keep the token
                     if (error.status === 401) {
+                        console.warn('401 error, clearing auth data');
                         this.clearAuthData();
+                    } else {
+                        console.warn('Non-401 error, keeping token:', error.status);
                     }
                 }
             });
+        } else {
+            console.log('No token found in localStorage');
         }
+    }
+
+    private isTokenExpired(token: string): boolean {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+            // Only consider token expired if it's actually expired
+            return payload.exp < currentTime;
+        } catch (error) {
+            console.error('Error parsing token:', error);
+            return true;
+        }
+    }
+
+    private setupTokenRefresh(token: string): void {
+        try {
+            const payload = JSON.parse(atob(token.split('.')[1]));
+            const currentTime = Math.floor(Date.now() / 1000);
+            const timeUntilExpiry = payload.exp - currentTime;
+            
+            // Refresh token 1 hour before expiry
+            const refreshTime = Math.max(timeUntilExpiry - 3600, 60000); // At least 1 minute
+            
+            console.log(`Token will expire in ${timeUntilExpiry} seconds, setting refresh in ${refreshTime} seconds`);
+            
+            setTimeout(() => {
+                console.log('Refreshing token...');
+                this.refreshToken();
+            }, refreshTime * 1000);
+        } catch (error) {
+            console.error('Error setting up token refresh:', error);
+        }
+    }
+
+    private refreshToken(): void {
+        const token = this.getToken();
+        if (!token) return;
+
+        // Call refresh endpoint
+        this.http.post<AuthResponse>(`${this.API_URL}/auth/refresh`, {})
+            .pipe(
+                tap(response => {
+                    this.setToken(response.token);
+                    this.setupTokenRefresh(response.token);
+                })
+            )
+            .subscribe({
+                error: (error) => {
+                    console.warn('Token refresh failed:', error);
+                    // If refresh fails, logout user
+                    this.clearAuthData();
+                }
+            });
     }
 
     register(userData: RegisterRequest): Observable<AuthResponse> {
@@ -75,6 +146,7 @@ export class AuthService {
                     this.setToken(response.token);
                     this.currentUserSubject.next(response.user);
                     this.isAuthenticatedSubject.next(true);
+                    this.setupTokenRefresh(response.token);
                 })
             );
     }
@@ -86,6 +158,7 @@ export class AuthService {
                     this.setToken(response.token);
                     this.currentUserSubject.next(response.user);
                     this.isAuthenticatedSubject.next(true);
+                    this.setupTokenRefresh(response.token);
                 })
             );
     }
@@ -142,5 +215,12 @@ export class AuthService {
 
     getCurrentUser(): User | null {
         return this.currentUserSubject.value;
+    }
+
+    // Check if current token is valid
+    isTokenValid(): boolean {
+        const token = this.getToken();
+        if (!token) return false;
+        return !this.isTokenExpired(token);
     }
 }

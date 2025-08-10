@@ -200,7 +200,8 @@ export class AppComponent implements OnInit {
     }
 
     ngOnInit() {
-        // Component initialization logic if needed
+        // Load user from token when app initializes
+        this.authService.loadUserFromToken();
     }
 
     navigateHome() {

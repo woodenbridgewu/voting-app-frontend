@@ -16,6 +16,15 @@ export class AuthGuard implements CanActivate {
         route: ActivatedRouteSnapshot,
         state: RouterStateSnapshot
     ): Observable<boolean> {
+        // First check if we have a valid token synchronously
+        if (this.authService.isTokenValid()) {
+            // If we have a valid token but the observable hasn't been set yet,
+            // try to load the user from token
+            if (!this.authService.isAuthenticated()) {
+                this.authService.loadUserFromToken();
+            }
+        }
+
         return this.authService.isAuthenticated$.pipe(
             take(1),
             map(isAuthenticated => {

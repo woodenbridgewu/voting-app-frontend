@@ -31,7 +31,8 @@ export class AuthInterceptor implements HttpInterceptor {
         return next.handle(authReq).pipe(
             catchError((error: HttpErrorResponse) => {
                 // If 401 error (Unauthorized), logout the user
-                if (error.status === 401) {
+                // But don't logout if it's a refresh token request to avoid infinite loop
+                if (error.status === 401 && !req.url.includes('/auth/refresh')) {
                     authService.logout().subscribe({
                         complete: () => {
                             this.router.navigate(['/auth/login']);

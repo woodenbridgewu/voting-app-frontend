@@ -350,6 +350,10 @@ export class PollListComponent implements OnInit {
     ) { }
 
     ngOnInit() {
+        // Check authentication status immediately
+        this.checkAuthStatus();
+        
+        // Subscribe to authentication changes
         this.authService.isAuthenticated$.subscribe(auth => {
             this.isAuthenticated = auth;
         });
@@ -364,6 +368,14 @@ export class PollListComponent implements OnInit {
             this.currentPage = 1;
             this.loadPolls();
         });
+    }
+
+    private checkAuthStatus(): void {
+        // If we have a valid token but the observable hasn't been set yet,
+        // try to load the user from token
+        if (this.authService.isTokenValid() && !this.authService.isAuthenticated()) {
+            this.authService.loadUserFromToken();
+        }
     }
 
     loadPolls() {
