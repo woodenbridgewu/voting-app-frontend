@@ -115,47 +115,42 @@ import { PollService, PollStats } from '../../../../services/poll.service';
           <div class="results-content">
             <h3>詳細結果</h3>
             
-            <div class="results-table">
-              <div class="table-header">
-                <div class="header-cell">排名</div>
-                <div class="header-cell">選項</div>
-                <div class="header-cell">票數</div>
-                <div class="header-cell">百分比</div>
-                <div class="header-cell">進度條</div>
-              </div>
-
+            <div class="results-grid">
               <div *ngFor="let option of stats.optionStats; let i = index" 
-                   class="table-row"
+                   class="result-card"
                    [class.winner]="isWinner(option)">
-                <div class="table-cell rank">
-                  <div class="rank-number">{{ i + 1 }}</div>
+                
+                <div class="result-image-container">
+                  <img 
+                    [src]="option.imageUrl || '/assets/default-option-image.svg'" 
+                    [alt]="option.text"
+                    class="result-image">
+                  <div class="rank-badge">{{ i + 1 }}</div>
                   <div class="winner-badge" *ngIf="isWinner(option)">
                     <mat-icon>emoji_events</mat-icon>
                   </div>
                 </div>
                 
-                <div class="table-cell option">
-                  <div class="option-content">
-                    <img *ngIf="option.imageUrl" 
-                         [src]="option.imageUrl" 
-                         [alt]="option.text"
-                         class="option-image">
-                    <span class="option-text">{{ option.text }}</span>
+                <div class="result-content">
+                  <div class="result-header">
+                    <h4>{{ option.text }}</h4>
+                    <div class="vote-details">
+                      <div class="vote-count">
+                        <mat-icon>how_to_vote</mat-icon>
+                        <span>{{ option.voteCount }} 票</span>
+                      </div>
+                      <div class="percentage">
+                        <mat-icon>pie_chart</mat-icon>
+                        <span>{{ option.percentage }}%</span>
+                      </div>
+                    </div>
                   </div>
-                </div>
-                
-                <div class="table-cell votes">
-                  {{ option.voteCount }} 票
-                </div>
-                
-                <div class="table-cell percentage">
-                  {{ option.percentage }}%
-                </div>
-                
-                <div class="table-cell progress">
-                  <div class="progress-bar">
-                    <div class="progress-fill" 
-                         [style.width.%]="option.percentage">
+                  
+                  <div class="result-progress">
+                    <div class="progress-bar">
+                      <div class="progress-fill" 
+                           [style.width.%]="option.percentage">
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -346,7 +341,130 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       height: 300px;
     }
 
-    .results-table,
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .result-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border: 2px solid #e0e0e0;
+    }
+
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    }
+
+    .result-card.winner {
+      border-color: #ffd700;
+      background: linear-gradient(135deg, #fffbf0 0%, #fff8e1 100%);
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
+    }
+
+    .result-image-container {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
+    }
+
+    .result-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #3f51b5, #667eea);
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .winner-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 215, 0, 0.9);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .winner-badge mat-icon {
+      color: #b8860b;
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .result-content {
+      padding: 20px;
+    }
+
+    .result-header {
+      margin-bottom: 16px;
+    }
+
+    .result-header h4 {
+      margin: 0 0 12px 0;
+      color: rgba(0,0,0,0.8);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .vote-details {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .vote-count,
+    .percentage {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.9rem;
+      color: rgba(0,0,0,0.7);
+      font-weight: 500;
+    }
+
+    .vote-count mat-icon,
+    .percentage mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: #3f51b5;
+    }
+
+    .percentage {
+      font-weight: bold;
+      color: #3f51b5;
+    }
+
+    .result-progress {
+      margin-top: 12px;
+    }
+
     .daily-table {
       background: white;
       border-radius: 8px;
@@ -354,15 +472,19 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
-    .table-header {
-      display: grid;
-      grid-template-columns: 80px 1fr 100px 100px 200px;
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #e0e0e0;
-    }
-
     .daily-table .table-header {
       grid-template-columns: 1fr 100px 100px;
+    }
+
+    .daily-table .table-row {
+      grid-template-columns: 1fr 100px 100px;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: 1fr 100px 100px;
+      background-color: #f8f9fa;
+      border-bottom: 1px solid #e0e0e0;
     }
 
     .header-cell {
@@ -378,13 +500,9 @@ import { PollService, PollStats } from '../../../../services/poll.service';
 
     .table-row {
       display: grid;
-      grid-template-columns: 80px 1fr 100px 100px 200px;
+      grid-template-columns: 1fr 100px 100px;
       border-bottom: 1px solid #e0e0e0;
       transition: background-color 0.2s;
-    }
-
-    .daily-table .table-row {
-      grid-template-columns: 1fr 100px 100px;
     }
 
     .table-row:last-child {
@@ -393,11 +511,6 @@ import { PollService, PollStats } from '../../../../services/poll.service';
 
     .table-row:hover {
       background-color: #f8f9fa;
-    }
-
-    .table-row.winner {
-      background-color: #fffbf0;
-      border-left: 4px solid #ffd700;
     }
 
     .table-cell {
@@ -411,54 +524,13 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       border-right: none;
     }
 
-    .rank {
-      justify-content: center;
-      position: relative;
-    }
-
-    .rank-number {
-      font-weight: bold;
-      color: #3f51b5;
-    }
-
-    .winner-badge {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-    }
-
-    .winner-badge mat-icon {
-      color: #ffd700;
-      font-size: 16px;
-      width: 16px;
-      height: 16px;
-    }
-
-    .option-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .option-image {
-      width: 40px;
-      height: 40px;
-      border-radius: 4px;
-      object-fit: cover;
-    }
-
-    .option-text {
+    .date {
       font-weight: 500;
     }
 
-    .votes,
-    .percentage {
+    .cumulative {
       font-weight: bold;
-      color: #3f51b5;
-    }
-
-    .progress {
-      padding: 16px 24px;
+      color: #4caf50;
     }
 
     .progress-bar {
@@ -534,24 +606,33 @@ import { PollService, PollStats } from '../../../../services/poll.service';
         height: 250px;
       }
 
-      .table-header,
-      .table-row {
-        grid-template-columns: 60px 1fr 80px 80px 120px;
-        font-size: 0.9rem;
+      .results-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
       }
 
-      .daily-table .table-header,
-      .daily-table .table-row {
+      .result-image-container {
+        height: 150px;
+      }
+
+      .result-content {
+        padding: 16px;
+      }
+
+      .vote-details {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .table-header,
+      .table-row {
         grid-template-columns: 1fr 80px 80px;
+        font-size: 0.9rem;
       }
 
       .table-cell {
         padding: 12px 8px;
-      }
-
-      .option-image {
-        width: 30px;
-        height: 30px;
       }
     }
   `]

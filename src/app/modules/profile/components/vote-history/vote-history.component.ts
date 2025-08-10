@@ -94,8 +94,7 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
                       
                       <div class="vote-choice">
                         <div class="choice-content">
-                          <img *ngIf="vote.option.imageUrl" 
-                               [src]="vote.option.imageUrl" 
+                          <img [src]="vote.option.imageUrl || '/assets/default-option-image.svg'" 
                                [alt]="vote.option.text"
                                class="choice-image">
                           <span class="choice-text">{{ vote.option.text }}</span>

@@ -88,18 +88,32 @@ import { AuthService } from '../../../../services/auth.service';
                   [class.selected]="selectedOptionId === option.id"
                   (click)="selectOption(option.id)">
                   
-                  <div class="option-content">
-                    <div class="option-image" *ngIf="option.imageUrl">
-                      <img [src]="option.imageUrl" [alt]="option.text">
+                  <div class="option-image-container">
+                    <img 
+                      [src]="option.imageUrl || '/assets/default-option-image.svg'" 
+                      [alt]="option.text"
+                      class="option-image"
+                      (error)="onImageError($event, option)">
+                    <div class="image-overlay">
+                      <mat-icon>photo</mat-icon>
                     </div>
-                    
+                  </div>
+                  
+                  <div class="option-content">
                     <div class="option-text">
                       <h4>{{ option.text }}</h4>
+                      <p class="option-description">點擊選擇此選項</p>
                     </div>
                     
                     <div class="option-stats">
-                      <div class="vote-count">{{ option.voteCount }} 票</div>
-                      <div class="percentage">{{ option.percentage || 0 }}%</div>
+                      <div class="vote-count">
+                        <mat-icon>how_to_vote</mat-icon>
+                        <span>{{ option.voteCount }} 票</span>
+                      </div>
+                      <div class="percentage">
+                        <mat-icon>pie_chart</mat-icon>
+                        <span>{{ option.percentage || 0 }}%</span>
+                      </div>
                     </div>
                   </div>
                   
@@ -145,28 +159,41 @@ import { AuthService } from '../../../../services/auth.service';
             <div class="results-grid">
               <div 
                 *ngFor="let option of poll.options; let i = index" 
-                class="result-item"
+                class="result-card"
                 [class.winner]="isWinner(option)">
                 
-                <div class="result-header">
-                  <div class="rank">{{ i + 1 }}</div>
-                  <div class="option-info">
-                    <h4>{{ option.text }}</h4>
-                    <div class="vote-details">
-                      <span>{{ option.voteCount }} 票</span>
-                      <span class="percentage">{{ option.percentage || 0 }}%</span>
-                    </div>
-                  </div>
+                <div class="result-image-container">
+                  <img 
+                    [src]="option.imageUrl || '/assets/default-option-image.svg'" 
+                    [alt]="option.text"
+                    class="result-image">
+                  <div class="rank-badge">{{ i + 1 }}</div>
                   <div class="winner-badge" *ngIf="isWinner(option)">
                     <mat-icon>emoji_events</mat-icon>
                   </div>
                 </div>
                 
-                <div class="result-progress">
-                  <div class="progress-bar">
-                    <div 
-                      class="progress-fill" 
-                      [style.width.%]="option.percentage || 0">
+                <div class="result-content">
+                  <div class="result-header">
+                    <h4>{{ option.text }}</h4>
+                    <div class="vote-details">
+                      <div class="vote-count">
+                        <mat-icon>how_to_vote</mat-icon>
+                        <span>{{ option.voteCount }} 票</span>
+                      </div>
+                      <div class="percentage">
+                        <mat-icon>pie_chart</mat-icon>
+                        <span>{{ option.percentage || 0 }}%</span>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="result-progress">
+                    <div class="progress-bar">
+                      <div 
+                        class="progress-fill" 
+                        [style.width.%]="option.percentage || 0">
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -332,65 +359,117 @@ import { AuthService } from '../../../../services/auth.service';
 
     .options-grid {
       display: grid;
-      gap: 16px;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 20px;
       margin-bottom: 32px;
     }
 
     .option-card {
       border: 2px solid #e0e0e0;
-      border-radius: 8px;
-      padding: 20px;
-      cursor: pointer;
-      transition: all 0.2s;
-      position: relative;
+      border-radius: 12px;
       overflow: hidden;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
     }
 
     .option-card:hover {
       border-color: #3f51b5;
-      transform: translateY(-2px);
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-4px);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
     }
 
     .option-card.selected {
       border-color: #3f51b5;
       background-color: #f3f4ff;
+      box-shadow: 0 8px 25px rgba(63, 81, 181, 0.2);
     }
 
-    .option-content {
-      display: flex;
-      align-items: center;
-      gap: 16px;
+    .option-image-container {
+      position: relative;
+      height: 200px;
+      overflow: hidden;
     }
 
     .option-image {
-      width: 60px;
-      height: 60px;
-      border-radius: 8px;
-      overflow: hidden;
-      flex-shrink: 0;
-    }
-
-    .option-image img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.3s ease;
+      display: block;
+      max-width: 100%;
+    }
+
+    .option-card:hover .option-image {
+      transform: scale(1.05);
+    }
+
+    .image-overlay {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(0,0,0,0.6);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+    }
+
+    .image-overlay mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .option-content {
+      padding: 20px;
     }
 
     .option-text {
-      flex: 1;
+      margin-bottom: 16px;
     }
 
     .option-text h4 {
-      margin: 0 0 4px 0;
+      margin: 0 0 8px 0;
       color: rgba(0,0,0,0.8);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .option-description {
+      margin: 0;
+      color: rgba(0,0,0,0.6);
+      font-size: 0.9rem;
     }
 
     .option-stats {
       display: flex;
-      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .vote-count,
+    .percentage {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.6);
+      color: rgba(0,0,0,0.7);
+      font-weight: 500;
+    }
+
+    .vote-count mat-icon,
+    .percentage mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: #3f51b5;
     }
 
     .progress-bar {
@@ -446,63 +525,118 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .results-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 20px;
+    }
+
+    .result-card {
       background: white;
-      border-radius: 8px;
-      padding: 24px;
+      border-radius: 12px;
+      overflow: hidden;
       box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      transition: all 0.3s ease;
+      border: 2px solid #e0e0e0;
     }
 
-    .result-item {
-      margin-bottom: 20px;
-      padding: 16px;
-      border-radius: 8px;
-      border: 1px solid #e0e0e0;
-      transition: all 0.2s;
+    .result-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
     }
 
-    .result-item:last-child {
-      margin-bottom: 0;
-    }
-
-    .result-item.winner {
+    .result-card.winner {
       border-color: #ffd700;
-      background-color: #fffbf0;
+      background: linear-gradient(135deg, #fffbf0 0%, #fff8e1 100%);
+      box-shadow: 0 4px 20px rgba(255, 215, 0, 0.3);
     }
 
-    .result-header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-bottom: 12px;
+    .result-image-container {
+      position: relative;
+      height: 180px;
+      overflow: hidden;
     }
 
-    .rank {
-      width: 32px;
-      height: 32px;
+    .result-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .rank-badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
-      background-color: #3f51b5;
+      background: linear-gradient(135deg, #3f51b5, #667eea);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
-      font-size: 0.9rem;
+      font-size: 1rem;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .option-info {
-      flex: 1;
+    .winner-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(255, 215, 0, 0.9);
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
-    .option-info h4 {
-      margin: 0 0 4px 0;
+    .winner-badge mat-icon {
+      color: #b8860b;
+      font-size: 24px;
+      width: 24px;
+      height: 24px;
+    }
+
+    .result-content {
+      padding: 20px;
+    }
+
+    .result-header {
+      margin-bottom: 16px;
+    }
+
+    .result-header h4 {
+      margin: 0 0 12px 0;
       color: rgba(0,0,0,0.8);
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
     .vote-details {
       display: flex;
-      gap: 16px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .vote-count,
+    .percentage {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.6);
+      color: rgba(0,0,0,0.7);
+      font-weight: 500;
+    }
+
+    .vote-count mat-icon,
+    .percentage mat-icon {
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
+      color: #3f51b5;
     }
 
     .percentage {
@@ -510,15 +644,8 @@ import { AuthService } from '../../../../services/auth.service';
       color: #3f51b5;
     }
 
-    .winner-badge mat-icon {
-      color: #ffd700;
-      font-size: 24px;
-      width: 24px;
-      height: 24px;
-    }
-
     .result-progress {
-      margin-top: 8px;
+      margin-top: 12px;
     }
 
     .action-buttons {
@@ -569,13 +696,39 @@ import { AuthService } from '../../../../services/auth.service';
         gap: 12px;
       }
 
+      .options-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .results-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+
+      .option-image-container,
+      .result-image-container {
+        height: 150px;
+      }
+
       .option-content {
-        flex-direction: column;
-        text-align: center;
+        padding: 16px;
+      }
+
+      .result-content {
+        padding: 16px;
       }
 
       .option-stats {
-        justify-content: center;
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
+      }
+
+      .vote-details {
+        flex-direction: column;
+        gap: 8px;
+        align-items: flex-start;
       }
 
       .action-buttons {
@@ -626,15 +779,12 @@ export class PollDetailComponent implements OnInit {
                     createdAt: poll.created_at,
                     startDate: poll.start_date,
                     creatorName: poll.creator_name,
-                    totalVotes: poll.total_votes,
-                    hasVotedToday: poll.has_voted_today,
-                    canEdit: poll.can_edit,
-                    options: poll.options?.map((option: any) => ({
-                        ...option,
-                        imageUrl: option.image_url,
-                        voteCount: option.vote_count
-                    })) || []
+                    totalVotes: poll.totalVotes,
+                    hasVotedToday: poll.hasVotedToday,
+                    canEdit: poll.canEdit,
+                    options: poll.options || []
                 };
+                
                 this.calculatePercentages();
                 this.isLoading = false;
             },
@@ -724,5 +874,10 @@ export class PollDetailComponent implements OnInit {
         if (!this.poll) return false;
         const maxVotes = Math.max(...this.poll.options.map(opt => opt.voteCount));
         return option.voteCount === maxVotes && option.voteCount > 0;
+    }
+
+    onImageError(event: any, option: any) {
+        console.error('Image failed to load:', option.imageUrl);
+        event.target.src = '/assets/default-option-image.svg';
     }
 } 

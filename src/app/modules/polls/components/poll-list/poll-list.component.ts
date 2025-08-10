@@ -392,7 +392,6 @@ export class PollListComponent implements OnInit {
 
         this.pollService.getPolls(params).subscribe({
             next: (response) => {
-                console.log('API 回傳 polls:', response.polls);
                 // 轉換後端 snake_case 欄位為前端 camelCase 欄位
                 this.polls = (response.polls || []).map((poll: any) => ({
                     ...poll,
