@@ -25,6 +25,7 @@ import { AuthService } from '../../../../services/auth.service';
             </div>
             
             <div class="poll-info">
+              <img *ngIf="poll.imageUrl" [src]="poll.imageUrl" [alt]="poll.title" class="cover-image" />
               <h1>{{ poll.title }}</h1>
               <p *ngIf="poll.description" class="description">{{ poll.description }}</p>
               
@@ -262,6 +263,15 @@ import { AuthService } from '../../../../services/auth.service';
       margin: 0 0 16px 0;
       font-size: 2.5rem;
       font-weight: 300;
+    }
+
+    .cover-image {
+      width: 100%;
+      max-height: 360px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     }
 
     .description {
@@ -782,6 +792,7 @@ export class PollDetailComponent implements OnInit {
                     totalVotes: poll.totalVotes,
                     hasVotedToday: poll.hasVotedToday,
                     canEdit: poll.canEdit,
+                    imageUrl: poll.image_url,
                     options: poll.options || []
                 };
                 

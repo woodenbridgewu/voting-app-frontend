@@ -24,6 +24,7 @@ export interface Poll {
     totalVotes: number;
     hasVotedToday?: boolean;
     canEdit?: boolean;
+    imageUrl?: string;
     options: PollOption[];
 }
 
@@ -102,7 +103,7 @@ export class PollService {
     constructor(private http: HttpClient) { }
 
     // Poll CRUD operations
-    createPoll(pollData: CreatePollRequest, images?: File[]): Observable<any> {
+    createPoll(pollData: CreatePollRequest, images?: File[], coverImage?: File): Observable<any> {
         const formData = new FormData();
         formData.append('pollData', JSON.stringify(pollData));
 
@@ -110,6 +111,10 @@ export class PollService {
             images.forEach((image, index) => {
                 formData.append('images', image);
             });
+        }
+
+        if (coverImage) {
+            formData.append('coverImage', coverImage);
         }
 
         return this.http.post(`${this.API_URL}/polls`, formData);

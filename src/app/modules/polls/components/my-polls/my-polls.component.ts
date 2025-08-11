@@ -43,6 +43,7 @@ import { AuthService } from '../../../../services/auth.service';
           <!-- Polls Grid -->
           <div *ngIf="!isLoading && polls.length > 0" class="polls-grid">
             <mat-card *ngFor="let poll of polls" class="poll-card">
+              <img mat-card-image [src]="poll.imageUrl || '/assets/default-option-image.svg'" [alt]="poll.title">
               <mat-card-header>
                 <div mat-card-avatar class="poll-avatar">
                   <mat-icon>poll</mat-icon>
@@ -336,7 +337,8 @@ export class MyPollsComponent implements OnInit {
                     createdAt: poll.created_at,
                     startDate: poll.start_date,
                     creatorName: poll.creator_name,
-                    totalVotes: poll.total_votes
+                    totalVotes: poll.total_votes,
+                    imageUrl: poll.image_url
                 }));
                 this.totalCount = response.pagination.total;
                 this.isLoading = false;

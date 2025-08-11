@@ -65,6 +65,27 @@ import { formatDate } from '@angular/common';
                   請選擇有效的日期
                 </mat-error>
               </mat-form-field>
+
+              <!-- Cover Image Upload -->
+              <div class="cover-upload">
+                <h4>投票封面圖（可選）</h4>
+                <div class="cover-upload-area" [class.has-image]="coverImagePreview" (click)="triggerCoverUpload()">
+                  <ng-container *ngIf="!coverImagePreview; else coverPreview">
+                    <mat-icon>image</mat-icon>
+                    <span>點擊上傳封面圖（建議 1200x630）</span>
+                  </ng-container>
+                  <ng-template #coverPreview>
+                    <img [src]="coverImagePreview!" alt="封面預覽">
+                  </ng-template>
+                  <input id="cover-file" type="file" accept="image/*" (change)="onCoverSelected($event)" style="display:none;" />
+                </div>
+                <div class="cover-actions" *ngIf="coverImagePreview">
+                  <button mat-button color="warn" type="button" (click)="removeCover()">
+                    <mat-icon>delete</mat-icon>
+                    移除封面
+                  </button>
+                </div>
+              </div>
             </div>
 
             <!-- Poll Options -->
@@ -245,6 +266,47 @@ import { formatDate } from '@angular/common';
       margin: 0 0 24px 0;
       color: rgba(0,0,0,0.8);
       font-size: 1.3rem;
+    }
+
+    .cover-upload {
+      margin-top: 8px;
+    }
+    .cover-upload h4 {
+      margin: 0 0 12px 0;
+      font-weight: 500;
+      color: rgba(0,0,0,0.8);
+    }
+    .cover-upload-area {
+      position: relative;
+      width: 100%;
+      padding-top: 52.5%;
+      border: 2px dashed #ccc;
+      border-radius: 8px;
+      background: #fafafa;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #666;
+      cursor: pointer;
+      overflow: hidden;
+    }
+    .cover-upload-area.has-image {
+      border-style: solid;
+      border-color: #3f51b5;
+      background: #fff;
+    }
+    .cover-upload-area img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .cover-actions {
+      margin-top: 8px;
+      text-align: right;
     }
 
     .card-header {
@@ -462,6 +524,8 @@ export class CreatePollComponent implements OnInit {
     pollForm: FormGroup;
     optionImages: (string | null)[] = [];
     isSubmitting = false;
+    coverFile: File | null = null;
+    coverImagePreview: string | null = null;
 
     constructor(
         private fb: FormBuilder,
@@ -516,6 +580,11 @@ export class CreatePollComponent implements OnInit {
         fileInput?.click();
     }
 
+    triggerCoverUpload() {
+        const fileInput = document.getElementById('cover-file') as HTMLInputElement;
+        fileInput?.click();
+    }
+
     onImageSelected(event: any, index: number) {
         const file = event.target.files[0];
         if (file) {
@@ -540,6 +609,28 @@ export class CreatePollComponent implements OnInit {
         if (fileInput) {
             fileInput.value = '';
         }
+    }
+
+    onCoverSelected(event: any) {
+        const file = event.target.files[0];
+        if (!file) return;
+        if (file.size > 5 * 1024 * 1024) {
+            this.snackBar.open('封面圖大小不能超過 5MB', '關閉', { duration: 3000 });
+            return;
+        }
+        this.coverFile = file;
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            this.coverImagePreview = e.target.result;
+        };
+        reader.readAsDataURL(file);
+    }
+
+    removeCover() {
+        this.coverFile = null;
+        this.coverImagePreview = null;
+        const input = document.getElementById('cover-file') as HTMLInputElement;
+        if (input) input.value = '';
     }
 
     onSubmit() {
@@ -574,7 +665,7 @@ export class CreatePollComponent implements OnInit {
                 }
             });
 
-            this.pollService.createPoll(pollData, images.length > 0 ? images : undefined).subscribe({
+            this.pollService.createPoll(pollData, images.length > 0 ? images : undefined, this.coverFile || undefined).subscribe({
                 next: (response) => {
                     this.snackBar.open('投票創建成功！', '關閉', { duration: 3000 });
                     this.router.navigate(['/polls', response.poll.id]);
