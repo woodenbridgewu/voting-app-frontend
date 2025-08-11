@@ -61,14 +61,8 @@ import { AuthService, User } from '../../../../services/auth.service';
 
                 <div class="form-row">
                   <mat-form-field appearance="outline" class="full-width">
-                    <mat-label>電子郵件 *</mat-label>
-                    <input matInput formControlName="email" placeholder="輸入您的電子郵件" type="email">
-                    <mat-error *ngIf="profileForm.get('email')?.hasError('required')">
-                      電子郵件為必填項目
-                    </mat-error>
-                    <mat-error *ngIf="profileForm.get('email')?.hasError('email')">
-                      請輸入有效的電子郵件地址
-                    </mat-error>
+                    <mat-label>電子郵件</mat-label>
+                    <input matInput formControlName="email" type="email" [disabled]="true">
                   </mat-form-field>
                 </div>
 
@@ -363,7 +357,7 @@ export class ProfileComponent implements OnInit {
     ) {
         this.profileForm = this.fb.group({
             name: ['', [Validators.required, Validators.minLength(2)]],
-            email: ['', [Validators.required, Validators.email]]
+            email: [{ value: '', disabled: true }]
         });
 
         this.passwordForm = this.fb.group({
@@ -413,8 +407,7 @@ export class ProfileComponent implements OnInit {
             this.isSubmitting = true;
 
             const updateData = {
-                name: this.profileForm.get('name')?.value,
-                email: this.profileForm.get('email')?.value
+                name: this.profileForm.get('name')?.value
             };
 
             this.authService.updateProfile(updateData).subscribe({
