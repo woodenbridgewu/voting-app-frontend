@@ -1,25 +1,50 @@
 <svg width="200" height="150" viewBox="0 0 200 150" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="grad1" x1="0%" y1="0%" x2="100%" y2="100%">
-      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
-      <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+    <linearGradient id="bgGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#f8fafc;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#f1f5f9;stop-opacity:1" />
     </linearGradient>
   </defs>
   
   <!-- Background -->
-  <rect width="200" height="150" fill="url(#grad1)" rx="8"/>
+  <rect width="200" height="150" fill="url(#bgGradient)" rx="12"/>
   
-  <!-- Icon -->
+  <!-- Border -->
+  <rect x="1" y="1" width="198" height="148" fill="none" stroke="#cbd5e1" stroke-width="2" rx="12"/>
+  
+  <!-- Icon Container -->
   <g transform="translate(100,65)">
-    <!-- Image icon -->
-    <rect x="-20" y="-15" width="40" height="30" fill="white" opacity="0.9" rx="2"/>
-    <circle cx="-10" cy="-5" r="3" fill="#667eea"/>
-    <polygon points="-5,5 5,5 0,15" fill="#667eea"/>
-    <rect x="-15" y="-10" width="30" height="20" fill="none" stroke="#667eea" stroke-width="1" opacity="0.6"/>
+    <!-- Image icon background -->
+    <rect x="-25" y="-20" width="50" height="40" fill="#f8fafc" rx="8" stroke="#cbd5e1" stroke-width="1"/>
+    
+    <!-- Image icon elements -->
+    <rect x="-20" y="-15" width="40" height="30" fill="#f1f5f9" rx="4"/>
+    <rect x="-18" y="-13" width="36" height="26" fill="none" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2,2"/>
+    
+    <!-- Mountain/landscape -->
+    <polygon points="-15,10 15,10 0,-5" fill="#475569" opacity="0.6"/>
+    <polygon points="-10,10 10,10 0,0" fill="#334155" opacity="0.4"/>
+    
+    <!-- Sun -->
+    <circle cx="12" cy="-8" r="4" fill="#f59e0b" opacity="0.7"/>
+    
+    <!-- Photo corners -->
+    <rect x="-20" y="-15" width="6" height="6" fill="none" stroke="#94a3b8" stroke-width="1"/>
+    <rect x="14" y="-15" width="6" height="6" fill="none" stroke="#94a3b8" stroke-width="1"/>
+    <rect x="-20" y="9" width="6" height="6" fill="none" stroke="#94a3b8" stroke-width="1"/>
+    <rect x="14" y="9" width="6" height="6" fill="none" stroke="#94a3b8" stroke-width="1"/>
   </g>
   
   <!-- Text -->
-  <text x="100" y="100" text-anchor="middle" fill="white" font-family="Arial, sans-serif" font-size="12" font-weight="bold">
+  <text x="100" y="105" text-anchor="middle" fill="#475569" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="11" font-weight="500">
     未上傳圖片
   </text>
+  
+  <!-- Subtle pattern overlay -->
+  <defs>
+    <pattern id="dots" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+      <circle cx="10" cy="10" r="1" fill="#cbd5e1" opacity="0.3"/>
+    </pattern>
+  </defs>
+  <rect width="200" height="150" fill="url(#dots)" rx="12"/>
 </svg>

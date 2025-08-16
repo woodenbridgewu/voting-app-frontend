@@ -132,13 +132,14 @@ import { AuthService } from '../../../../services/auth.service';
     styles: [`
     .poll-list-container {
       min-height: 100vh;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .header-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      padding: 48px 0;
+      background-color: var(--background-white);
+      color: var(--text-primary);
+      padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-content {
@@ -150,57 +151,37 @@ import { AuthService } from '../../../../services/auth.service';
     .header-content h1 {
       margin: 0 0 8px 0;
       font-size: 2.5rem;
-      font-weight: 300;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.2;
     }
 
     .subtitle {
       margin: 0 0 32px 0;
       font-size: 1.1rem;
-      opacity: 0.9;
+      color: var(--text-secondary);
+      font-weight: 400;
     }
 
     .search-section {
       display: flex;
       flex-direction: column;
-      gap: 16px;
-      max-width: 600px;
+      gap: 24px;
+      max-width: 800px;
     }
 
     .search-field {
       width: 100%;
     }
 
-    .search-field ::ng-deep .mat-mdc-form-field-flex {
-      background-color: rgba(255, 255, 255, 0.1);
-      border-radius: 4px;
-    }
-
-    .search-field ::ng-deep .mat-mdc-text-field-wrapper {
-      background-color: transparent;
-    }
-
-    .search-field ::ng-deep .mdc-notched-outline__leading,
-    .search-field ::ng-deep .mdc-notched-outline__notch,
-    .search-field ::ng-deep .mdc-notched-outline__trailing {
-      border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .search-field ::ng-deep .mat-mdc-form-field-label {
-      color: rgba(255, 255, 255, 0.7);
-    }
-
-    .search-field ::ng-deep input {
-      color: white;
-    }
-
     .filter-section {
       display: flex;
-      gap: 16px;
+      gap: 24px;
     }
 
     .filter-section mat-form-field {
       flex: 1;
-      min-width: 120px;
+      min-width: 160px;
     }
 
     .content-section {
@@ -226,18 +207,19 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .poll-card {
-      cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
       height: fit-content;
+      background-color: var(--background-white);
+      border: 1px solid var(--border-color);
     }
 
     .poll-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-heavy);
     }
 
     .poll-avatar {
-      background-color: #3f51b5;
+      background-color: var(--primary-color);
       color: white;
       display: flex;
       align-items: center;
@@ -246,7 +228,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .poll-description {
       margin: 0 0 16px 0;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
       line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -266,13 +248,14 @@ import { AuthService } from '../../../../services/auth.service';
       align-items: center;
       gap: 4px;
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .stat-item mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
+      color: var(--primary-color);
     }
 
     .status-indicator {
@@ -282,7 +265,7 @@ import { AuthService } from '../../../../services/auth.service';
     .empty-state {
       text-align: center;
       padding: 64px 32px;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .empty-state mat-icon {
@@ -295,7 +278,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .empty-state h3 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
     }
 
     .empty-state p {
@@ -316,8 +299,17 @@ import { AuthService } from '../../../../services/auth.service';
         font-size: 2rem;
       }
 
+      .search-section {
+        gap: 16px;
+      }
+
       .filter-section {
         flex-direction: column;
+        gap: 16px;
+      }
+
+      .filter-section mat-form-field {
+        min-width: auto;
       }
 
       .polls-grid {

@@ -140,13 +140,14 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
     styles: [`
     .vote-history-container {
       min-height: 100vh;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .header-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background-color: var(--background-white);
+      color: var(--text-primary);
       padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-content {
@@ -161,19 +162,20 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
     }
 
     .back-button button {
-      color: white;
+      color: var(--text-secondary);
     }
 
     .header-info h1 {
       margin: 0 0 8px 0;
       font-size: 2.5rem;
       font-weight: 300;
+      color: var(--text-primary);
     }
 
     .header-info p {
       margin: 0;
       font-size: 1.1rem;
-      opacity: 0.9;
+      color: var(--text-secondary);
     }
 
     .content-section {
@@ -198,10 +200,11 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
     }
 
     .stats-card {
-      background: white;
-      border-radius: 8px;
+      background: var(--background-white);
+      border-radius: 12px;
       padding: 32px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
     .stats-grid {
@@ -220,7 +223,7 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
       width: 50px;
       height: 50px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--primary-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -240,18 +243,18 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
     .stat-value {
       font-size: 1.5rem;
       font-weight: bold;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       margin-bottom: 4px;
     }
 
     .stat-label {
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .history-list h3 {
       margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.5rem;
     }
 
@@ -263,16 +266,17 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
     }
 
     .history-item {
-      background: white;
-      border-radius: 8px;
+      background: var(--background-white);
+      border-radius: 12px;
       padding: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
       transition: transform 0.2s, box-shadow 0.2s;
     }
 
     .history-item:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-medium);
     }
 
     .vote-content {
@@ -292,13 +296,13 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
 
     .poll-title h4 {
       margin: 0 0 4px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.2rem;
     }
 
     .vote-date {
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.5);
+      color: var(--text-secondary);
     }
 
     .vote-choice {
@@ -311,9 +315,9 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
       align-items: center;
       gap: 12px;
       padding: 8px 16px;
-      background-color: #f3f4ff;
+      background-color: rgba(33, 150, 243, 0.08);
       border-radius: 20px;
-      border: 1px solid #e0e0e0;
+      border: 1px solid var(--border-color);
     }
 
     .choice-image {
@@ -325,7 +329,7 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
 
     .choice-text {
       font-weight: 500;
-      color: #3f51b5;
+      color: var(--primary-color);
     }
 
     .vote-actions {
@@ -334,12 +338,13 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
 
     .vote-actions button {
       padding: 8px 16px;
+      color: var(--primary-color);
     }
 
     .empty-state {
       text-align: center;
       padding: 64px 32px;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .empty-state mat-icon {
@@ -352,7 +357,7 @@ import { PollService, VoteHistory } from '../../../../services/poll.service';
 
     .empty-state h3 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
     }
 
     .empty-state p {

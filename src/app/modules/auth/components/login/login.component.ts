@@ -81,7 +81,7 @@ import { AuthService } from '../../../../services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background-color: var(--background-light);
       padding: 20px;
     }
 
@@ -91,7 +91,7 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .auth-avatar {
-      background-color: #3f51b5;
+      background-color: var(--primary-color);
       color: white;
       display: flex;
       align-items: center;
@@ -113,6 +113,8 @@ import { AuthService } from '../../../../services/auth.service';
       margin-top: 16px;
       height: 48px;
       font-size: 16px;
+      background-color: var(--primary-color);
+      color: white;
     }
 
     .auth-actions {
@@ -125,11 +127,11 @@ import { AuthService } from '../../../../services/auth.service';
 
     .auth-actions p {
       margin: 0;
-      color: rgba(0, 0, 0, 0.6);
+      color: var(--text-secondary);
     }
 
     .auth-link {
-      color: #3f51b5;
+      color: var(--primary-color);
       text-decoration: none;
       font-weight: 500;
     }
@@ -139,7 +141,8 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     mat-card {
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      box-shadow: var(--shadow-medium);
+      border: 1px solid var(--border-color);
     }
 
     @media (max-width: 480px) {

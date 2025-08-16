@@ -166,31 +166,46 @@ import { AuthService, User } from '../../../../services/auth.service';
     styles: [`
     .profile-container {
       min-height: 100vh;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .header-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background-color: var(--background-white);
+      color: var(--text-primary);
       padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-content {
       max-width: 800px;
       margin: 0 auto;
       padding: 0 24px;
+      position: relative;
     }
 
-    .header-content h1 {
+    .back-button {
+      margin-bottom: 16px;
+    }
+
+    .back-button button {
+      color: var(--text-secondary);
+    }
+
+    .header-info {
+      margin-bottom: 24px;
+    }
+
+    .header-info h1 {
       margin: 0 0 8px 0;
       font-size: 2.5rem;
       font-weight: 300;
+      color: var(--text-primary);
     }
 
-    .header-content p {
+    .header-info p {
       margin: 0;
       font-size: 1.1rem;
-      opacity: 0.9;
+      color: var(--text-secondary);
     }
 
     .content-section {
@@ -208,70 +223,23 @@ import { AuthService, User } from '../../../../services/auth.service';
       text-align: center;
     }
 
-    .profile-content {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .profile-card,
-    .form-card,
-    .actions-card {
-      background: white;
-      border-radius: 8px;
+    .profile-form {
+      background: var(--background-white);
+      border-radius: 12px;
       padding: 32px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
-    .card-header {
-      margin-bottom: 24px;
+    .form-section {
+      margin-bottom: 32px;
     }
 
-    .avatar-section {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-    }
-
-    .avatar {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-    }
-
-    .avatar mat-icon {
-      font-size: 40px;
-      width: 40px;
-      height: 40px;
-    }
-
-    .user-info h3 {
-      margin: 0 0 4px 0;
-      color: rgba(0,0,0,0.8);
-      font-size: 1.5rem;
-    }
-
-    .user-info p {
-      margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.6);
-      font-size: 1rem;
-    }
-
-    .member-since {
-      font-size: 0.9rem;
-      color: rgba(0,0,0,0.5);
-    }
-
-    .form-card h3,
-    .actions-card h3 {
-      margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.8);
+    .form-section h3 {
+      margin: 0 0 16px 0;
+      color: var(--text-primary);
       font-size: 1.3rem;
+      font-weight: 500;
     }
 
     .form-row {
@@ -283,28 +251,35 @@ import { AuthService, User } from '../../../../services/auth.service';
     }
 
     .form-actions {
-      margin-top: 24px;
-    }
-
-    .form-actions button {
-      padding: 12px 24px;
-      font-size: 1rem;
-    }
-
-    .actions-grid {
       display: flex;
-      flex-direction: column;
-      gap: 12px;
+      gap: 16px;
+      justify-content: flex-end;
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
     }
 
-    .actions-grid button {
-      justify-content: flex-start;
-      padding: 16px;
-      font-size: 1rem;
+    .save-btn {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 32px;
+      font-size: 1.1rem;
     }
 
-    .actions-grid button mat-icon {
-      margin-right: 12px;
+    .cancel-btn {
+      color: var(--text-secondary);
+    }
+
+    .success-message {
+      color: #4caf50;
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    .error-message {
+      color: var(--accent-color);
+      font-size: 0.9rem;
+      margin-top: 8px;
     }
 
     @media (max-width: 768px) {
@@ -313,31 +288,22 @@ import { AuthService, User } from '../../../../services/auth.service';
         padding: 0 16px;
       }
 
-      .header-content h1 {
+      .header-info h1 {
         font-size: 2rem;
       }
 
-      .profile-card,
-      .form-card,
-      .actions-card {
+      .profile-form {
         padding: 20px;
       }
 
-      .avatar-section {
+      .form-actions {
         flex-direction: column;
-        text-align: center;
-        gap: 16px;
+        align-items: stretch;
       }
 
-      .avatar {
-        width: 60px;
-        height: 60px;
-      }
-
-      .avatar mat-icon {
-        font-size: 30px;
-        width: 30px;
-        height: 30px;
+      .save-btn,
+      .cancel-btn {
+        width: 100%;
       }
     }
   `]

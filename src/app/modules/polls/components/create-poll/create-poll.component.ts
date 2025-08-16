@@ -12,195 +12,205 @@ import { formatDate } from '@angular/common';
       <!-- Header Section -->
       <div class="header-section">
         <div class="header-content">
-          <div class="back-button">
-            <button mat-icon-button (click)="goBack()">
-              <mat-icon>arrow_back</mat-icon>
-            </button>
-          </div>
-          
           <div class="header-info">
-            <h1>創建新投票</h1>
-            <p>設計您的投票，讓社群參與決策</p>
+            <div class="back-button">
+              <button mat-icon-button (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+              </button>
+            </div>
+            
+            <div class="title-section">
+              <h1>創建新投票</h1>
+              <p>設計您的投票，讓社群參與決策</p>
+            </div>
           </div>
         </div>
       </div>
 
-      <!-- Form Section -->
-      <div class="form-section">
-        <div class="form-content">
-          <form [formGroup]="pollForm" (ngSubmit)="onSubmit()">
-            <!-- Basic Information -->
-            <div class="form-card">
-              <h3>基本資訊</h3>
-              
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>投票標題 *</mat-label>
-                <input matInput formControlName="title" placeholder="輸入投票標題">
-                <mat-error *ngIf="pollForm.get('title')?.hasError('required')">
-                  標題為必填項目
-                </mat-error>
-                <mat-error *ngIf="pollForm.get('title')?.hasError('minlength')">
-                  標題至少需要 3 個字元
-                </mat-error>
-              </mat-form-field>
+      <!-- Content Section -->
+      <div class="content-section">
+        <div class="content-wrapper">
+          <!-- Loading State -->
+          <div *ngIf="isSubmitting" class="loading-section">
+            <app-loading-spinner message="創建投票中..."></app-loading-spinner>
+          </div>
 
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>投票描述</mat-label>
-                <textarea matInput formControlName="description" 
-                         placeholder="描述投票的目的和背景（可選）"
-                         rows="3"></textarea>
-                <mat-error *ngIf="pollForm.get('description')?.hasError('maxlength')">
-                  描述不能超過 500 個字元
-                </mat-error>
-              </mat-form-field>
-
-              <mat-form-field appearance="outline" class="full-width">
-                <mat-label>結束日期</mat-label>
-                <input matInput [matDatepicker]="endDatePicker" 
-                       formControlName="endDate" 
-                       placeholder="選擇結束日期（可選）">
-                <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #endDatePicker></mat-datepicker>
-                <mat-error *ngIf="pollForm.get('endDate')?.hasError('invalidDate')">
-                  請選擇有效的日期
-                </mat-error>
-              </mat-form-field>
-
-              <!-- Cover Image Upload -->
-              <div class="cover-upload">
-                <h4>投票封面圖（可選）</h4>
-                <div class="cover-upload-area" [class.has-image]="coverImagePreview" (click)="triggerCoverUpload()">
-                  <ng-container *ngIf="!coverImagePreview; else coverPreview">
-                    <mat-icon>image</mat-icon>
-                    <span>點擊上傳封面圖（建議 1200x630）</span>
-                  </ng-container>
-                  <ng-template #coverPreview>
-                    <img [src]="coverImagePreview!" alt="封面預覽">
-                  </ng-template>
-                  <input id="cover-file" type="file" accept="image/*" (change)="onCoverSelected($event)" style="display:none;" />
+          <!-- Form Content -->
+          <div *ngIf="!isSubmitting">
+            <form [formGroup]="pollForm" (ngSubmit)="onSubmit()" class="poll-form">
+              <!-- Basic Information -->
+              <div class="form-section">
+                <h3>基本資訊</h3>
+                
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>投票標題 *</mat-label>
+                    <input matInput formControlName="title" placeholder="輸入投票標題">
+                    <mat-error *ngIf="pollForm.get('title')?.hasError('required')">
+                      標題為必填項目
+                    </mat-error>
+                    <mat-error *ngIf="pollForm.get('title')?.hasError('minlength')">
+                      標題至少需要 3 個字元
+                    </mat-error>
+                  </mat-form-field>
                 </div>
-                <div class="cover-actions" *ngIf="coverImagePreview">
-                  <button mat-button color="warn" type="button" (click)="removeCover()">
-                    <mat-icon>delete</mat-icon>
-                    移除封面
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>投票描述</mat-label>
+                    <textarea matInput formControlName="description" 
+                             placeholder="描述投票的目的和背景（可選）"
+                             rows="3"></textarea>
+                    <mat-error *ngIf="pollForm.get('description')?.hasError('maxlength')">
+                      描述不能超過 500 個字元
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <div class="form-row">
+                  <mat-form-field appearance="outline" class="full-width">
+                    <mat-label>結束日期</mat-label>
+                    <input matInput [matDatepicker]="endDatePicker" 
+                           formControlName="endDate" 
+                           placeholder="選擇結束日期（可選）">
+                    <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                    <mat-datepicker #endDatePicker></mat-datepicker>
+                    <mat-error *ngIf="pollForm.get('endDate')?.hasError('invalidDate')">
+                      請選擇有效的日期
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+
+                <!-- Cover Image Upload -->
+                <div class="form-row">
+                  <h4>投票封面圖（可選）</h4>
+                  <div class="cover-upload-area" [class.has-image]="coverImagePreview" (click)="triggerCoverUpload()">
+                    <ng-container *ngIf="!coverImagePreview; else coverPreview">
+                      <mat-icon>image</mat-icon>
+                      <span>點擊上傳封面圖（建議 1200x630）</span>
+                    </ng-container>
+                    <ng-template #coverPreview>
+                      <img [src]="coverImagePreview!" alt="封面預覽">
+                    </ng-template>
+                    <input id="cover-file" type="file" accept="image/*" (change)="onCoverSelected($event)" style="display:none;" />
+                  </div>
+                  <div class="cover-actions" *ngIf="coverImagePreview">
+                    <button mat-button color="warn" type="button" (click)="removeCover()">
+                      <mat-icon>delete</mat-icon>
+                      移除封面
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Poll Options -->
+              <div class="form-section">
+                <div class="options-header">
+                  <h3>投票選項</h3>
+                  <button type="button" mat-button color="primary" (click)="addOption()">
+                    <mat-icon>add</mat-icon>
+                    新增選項
+                  </button>
+                </div>
+
+                <div formArrayName="options" class="options-section">
+                  <div *ngFor="let option of optionsArray.controls; let i = index" 
+                       [formGroupName]="i" 
+                       class="option-item">
+                    
+                    <div class="option-header">
+                      <div class="option-number">{{ i + 1 }}</div>
+                      <button type="button" mat-icon-button color="warn" 
+                              (click)="removeOption(i)" 
+                              [disabled]="optionsArray.length <= 2"
+                              class="remove-option-btn">
+                        <mat-icon>delete</mat-icon>
+                      </button>
+                    </div>
+
+                    <div class="option-content">
+                      <mat-form-field appearance="outline" class="option-text-field">
+                        <mat-label>選項文字 *</mat-label>
+                        <input matInput formControlName="text" 
+                               [placeholder]="'選項 ' + (i + 1) + ' 的文字'">
+                        <mat-error *ngIf="option.get('text')?.hasError('required')">
+                          選項文字為必填項目
+                        </mat-error>
+                      </mat-form-field>
+
+                      <div class="image-upload-section">
+                        <div class="upload-area" 
+                             [class.has-image]="optionImages[i]"
+                             (click)="triggerImageUpload(i)">
+                          
+                          <div *ngIf="!optionImages[i]" class="upload-placeholder">
+                            <mat-icon>add_photo_alternate</mat-icon>
+                            <span>新增圖片（可選）</span>
+                          </div>
+                          
+                          <img *ngIf="optionImages[i]" 
+                               [src]="optionImages[i]" 
+                               [alt]="'選項 ' + (i + 1) + ' 圖片'"
+                               class="image-preview">
+                          
+                          <input #fileInput type="file" 
+                                 [id]="'file-' + i"
+                                 accept="image/*"
+                                 (change)="onImageSelected($event, i)"
+                                 style="display: none;">
+                        </div>
+                        
+                        <button *ngIf="optionImages[i]" 
+                                type="button" 
+                                mat-button 
+                                color="warn" 
+                                (click)="removeImage(i)"
+                                class="upload-button">
+                          <mat-icon>delete</mat-icon>
+                          移除圖片
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div *ngIf="optionsArray.length < 2" class="min-options-warning">
+                  <mat-icon>warning</mat-icon>
+                  <span>至少需要 2 個選項</span>
+                </div>
+
+                <div class="add-option-section">
+                  <button type="button" mat-button (click)="addOption()" class="add-option-btn">
+                    <mat-icon>add</mat-icon>
+                    新增選項
                   </button>
                 </div>
               </div>
-            </div>
 
-            <!-- Poll Options -->
-            <div class="form-card">
-              <div class="card-header">
-                <h3>投票選項</h3>
-                <button type="button" mat-button color="primary" (click)="addOption()">
-                  <mat-icon>add</mat-icon>
-                  新增選項
+              <!-- Form Actions -->
+              <div class="form-actions">
+                <button type="button" mat-button (click)="goBack()" class="cancel-btn">
+                  取消
+                </button>
+                <button type="submit" 
+                        mat-raised-button 
+                        color="primary"
+                        [disabled]="!pollForm.valid || isSubmitting"
+                        class="submit-btn">
+                  <mat-icon>create</mat-icon>
+                  {{ isSubmitting ? '創建中...' : '創建投票' }}
                 </button>
               </div>
 
-              <div formArrayName="options" class="options-container">
-                <div *ngFor="let option of optionsArray.controls; let i = index" 
-                     [formGroupName]="i" 
-                     class="option-item">
-                  
-                  <div class="option-header">
-                    <h4>選項 {{ i + 1 }}</h4>
-                    <button type="button" mat-icon-button color="warn" 
-                            (click)="removeOption(i)" 
-                            [disabled]="optionsArray.length <= 2">
-                      <mat-icon>delete</mat-icon>
-                    </button>
-                  </div>
-
-                  <div class="option-content">
-                    <mat-form-field appearance="outline" class="option-text">
-                      <mat-label>選項文字 *</mat-label>
-                      <input matInput formControlName="text" 
-                             [placeholder]="'選項 ' + (i + 1) + ' 的文字'">
-                      <mat-error *ngIf="option.get('text')?.hasError('required')">
-                        選項文字為必填項目
-                      </mat-error>
-                    </mat-form-field>
-
-                    <div class="image-upload-section">
-                      <div class="upload-area" 
-                           [class.has-image]="optionImages[i]"
-                           (click)="triggerImageUpload(i)">
-                        
-                        <div *ngIf="!optionImages[i]" class="upload-placeholder">
-                          <mat-icon>add_photo_alternate</mat-icon>
-                          <span>新增圖片（可選）</span>
-                        </div>
-                        
-                        <img *ngIf="optionImages[i]" 
-                             [src]="optionImages[i]" 
-                             [alt]="'選項 ' + (i + 1) + ' 圖片'"
-                             class="option-image">
-                        
-                        <input #fileInput type="file" 
-                               [id]="'file-' + i"
-                               accept="image/*"
-                               (change)="onImageSelected($event, i)"
-                               style="display: none;">
-                      </div>
-                      
-                      <button *ngIf="optionImages[i]" 
-                              type="button" 
-                              mat-button 
-                              color="warn" 
-                              (click)="removeImage(i)">
-                        <mat-icon>delete</mat-icon>
-                        移除圖片
-                      </button>
-                    </div>
-                  </div>
-                </div>
+              <!-- Success/Error Messages -->
+              <div *ngIf="successMessage" class="success-message">
+                {{ successMessage }}
               </div>
-
-              <div *ngIf="optionsArray.length < 2" class="min-options-warning">
-                <mat-icon>warning</mat-icon>
-                <span>至少需要 2 個選項</span>
+              <div *ngIf="errorMessage" class="error-message">
+                {{ errorMessage }}
               </div>
-            </div>
-
-            <!-- Preview Section -->
-            <div class="form-card" *ngIf="pollForm.valid">
-              <h3>預覽</h3>
-              <div class="preview-content">
-                <h4>{{ pollForm.get('title')?.value || '投票標題' }}</h4>
-                <p *ngIf="pollForm.get('description')?.value">
-                  {{ pollForm.get('description')?.value }}
-                </p>
-                
-                <div class="preview-options">
-                  <div *ngFor="let option of optionsArray.controls; let i = index" 
-                       class="preview-option">
-                    <div class="preview-option-content">
-                      <img *ngIf="optionImages[i]" 
-                           [src]="optionImages[i]" 
-                           [alt]="option.get('text')?.value"
-                           class="preview-image">
-                      <span>{{ option.get('text')?.value || '選項 ' + (i + 1) }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Submit Actions -->
-            <div class="submit-actions">
-              <button type="button" mat-button (click)="goBack()">
-                取消
-              </button>
-              <button type="submit" 
-                      mat-raised-button 
-                      color="primary"
-                      [disabled]="!pollForm.valid || isSubmitting">
-                <mat-icon>create</mat-icon>
-                {{ isSubmitting ? '創建中...' : '創建投票' }}
-              </button>
-            </div>
-          </form>
+            </form>
+          </div>
         </div>
       </div>
     </div>
@@ -208,146 +218,148 @@ import { formatDate } from '@angular/common';
     styles: [`
     .create-poll-container {
       min-height: 100vh;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .header-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background-color: var(--background-white);
+      color: var(--text-primary);
       padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-content {
       max-width: 800px;
       margin: 0 auto;
       padding: 0 24px;
-      position: relative;
+    }
+
+    .header-info {
+      display: flex;
+      align-items: center;
+      gap: 24px;
     }
 
     .back-button {
-      margin-bottom: 16px;
+      flex-shrink: 0;
     }
 
     .back-button button {
-      color: white;
+      color: var(--text-secondary);
     }
 
-    .header-info h1 {
+    .title-section {
+      flex: 1;
+    }
+
+    .title-section h1 {
       margin: 0 0 8px 0;
       font-size: 2.5rem;
-      font-weight: 300;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.2;
     }
 
-    .header-info p {
+    .title-section p {
       margin: 0;
       font-size: 1.1rem;
-      opacity: 0.9;
+      color: var(--text-secondary);
+      font-weight: 400;
     }
 
-    .form-section {
+    .content-section {
       padding: 32px 0;
     }
 
-    .form-content {
+    .content-wrapper {
       max-width: 800px;
       margin: 0 auto;
       padding: 0 24px;
     }
 
-    .form-card {
-      background: white;
-      border-radius: 8px;
+    .loading-section {
+      padding: 64px 0;
+      text-align: center;
+    }
+
+    .poll-form {
+      background: var(--background-white);
+      border-radius: 12px;
       padding: 32px;
-      margin-bottom: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
-    .form-card h3 {
-      margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.8);
+    .form-section {
+      margin-bottom: 32px;
+    }
+
+    .form-section h3 {
+      margin: 0 0 16px 0;
+      color: var(--text-primary);
       font-size: 1.3rem;
-    }
-
-    .cover-upload {
-      margin-top: 8px;
-    }
-    .cover-upload h4 {
-      margin: 0 0 12px 0;
       font-weight: 500;
-      color: rgba(0,0,0,0.8);
-    }
-    .cover-upload-area {
-      position: relative;
-      width: 100%;
-      padding-top: 52.5%;
-      border: 2px dashed #ccc;
-      border-radius: 8px;
-      background: #fafafa;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      color: #666;
-      cursor: pointer;
-      overflow: hidden;
-    }
-    .cover-upload-area.has-image {
-      border-style: solid;
-      border-color: #3f51b5;
-      background: #fff;
-    }
-    .cover-upload-area img {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .cover-actions {
-      margin-top: 8px;
-      text-align: right;
     }
 
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 24px;
-    }
-
-    .card-header h3 {
-      margin: 0;
+    .form-row {
+      margin-bottom: 16px;
     }
 
     .full-width {
       width: 100%;
+    }
+
+    .options-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
       margin-bottom: 16px;
     }
 
-    .options-container {
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
+    .options-header h3 {
+      margin: 0;
+    }
+
+    .options-section {
+      margin-top: 24px;
     }
 
     .option-item {
-      border: 1px solid #e0e0e0;
+      background: var(--background-light);
+      border: 1px solid var(--border-color);
       border-radius: 8px;
-      padding: 20px;
-      background-color: #fafafa;
+      padding: 16px;
+      margin-bottom: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .option-item:hover {
+      border-color: var(--primary-color);
+      box-shadow: var(--shadow-light);
     }
 
     .option-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
     }
 
-    .option-header h4 {
-      margin: 0;
-      color: rgba(0,0,0,0.8);
+    .option-number {
+      background: var(--primary-color);
+      color: white;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: bold;
+    }
+
+    .remove-option-btn {
+      color: var(--accent-color);
     }
 
     .option-content {
@@ -357,7 +369,7 @@ import { formatDate } from '@angular/common';
       align-items: start;
     }
 
-    .option-text {
+    .option-text-field {
       width: 100%;
     }
 
@@ -365,13 +377,13 @@ import { formatDate } from '@angular/common';
       display: flex;
       flex-direction: column;
       gap: 8px;
-      align-items: center;
+      min-width: 120px;
     }
 
     .upload-area {
       width: 120px;
       height: 120px;
-      border: 2px dashed #ccc;
+      border: 2px dashed var(--border-color);
       border-radius: 8px;
       display: flex;
       align-items: center;
@@ -379,16 +391,17 @@ import { formatDate } from '@angular/common';
       cursor: pointer;
       transition: all 0.2s;
       overflow: hidden;
+      background-color: var(--background-light);
     }
 
     .upload-area:hover {
-      border-color: #3f51b5;
-      background-color: #f3f4ff;
+      border-color: var(--primary-color);
+      background-color: rgba(33, 150, 243, 0.04);
     }
 
     .upload-area.has-image {
       border-style: solid;
-      border-color: #3f51b5;
+      border-color: var(--primary-color);
     }
 
     .upload-placeholder {
@@ -396,8 +409,7 @@ import { formatDate } from '@angular/common';
       flex-direction: column;
       align-items: center;
       gap: 8px;
-      color: #666;
-      text-align: center;
+      color: var(--text-secondary);
     }
 
     .upload-placeholder mat-icon {
@@ -408,12 +420,66 @@ import { formatDate } from '@angular/common';
 
     .upload-placeholder span {
       font-size: 0.8rem;
+      text-align: center;
     }
 
-    .option-image {
+    .image-preview {
       width: 100%;
       height: 100%;
       object-fit: cover;
+    }
+
+    .upload-button {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+      min-width: 80px;
+    }
+
+    .cover-upload-area {
+      width: 100%;
+      padding-top: 52.5%;
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      background: var(--background-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: var(--text-secondary);
+      cursor: pointer;
+      overflow: hidden;
+      position: relative;
+      margin-bottom: 8px;
+    }
+
+    .cover-upload-area.has-image {
+      border-style: solid;
+      border-color: var(--primary-color);
+      background: var(--background-white);
+    }
+
+    .cover-upload-area img {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .cover-upload-area mat-icon {
+      font-size: 48px;
+      width: 48px;
+      height: 48px;
+    }
+
+    .cover-upload-area span {
+      font-size: 1rem;
+    }
+
+    .cover-actions {
+      margin-top: 8px;
+      text-align: right;
     }
 
     .min-options-warning {
@@ -431,72 +497,65 @@ import { formatDate } from '@angular/common';
       height: 20px;
     }
 
-    .preview-content {
-      background-color: #f8f9fa;
-      border-radius: 8px;
-      padding: 20px;
+    .add-option-section {
+      text-align: center;
+      margin-top: 24px;
     }
 
-    .preview-content h4 {
-      margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+    .add-option-btn {
+      background-color: var(--primary-color);
+      color: white;
     }
 
-    .preview-content p {
-      margin: 0 0 16px 0;
-      color: rgba(0,0,0,0.6);
-      line-height: 1.5;
-    }
-
-    .preview-options {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .preview-option {
-      background: white;
-      border: 1px solid #e0e0e0;
-      border-radius: 4px;
-      padding: 12px;
-    }
-
-    .preview-option-content {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-    }
-
-    .preview-image {
-      width: 40px;
-      height: 40px;
-      border-radius: 4px;
-      object-fit: cover;
-    }
-
-    .submit-actions {
+    .form-actions {
       display: flex;
       gap: 16px;
       justify-content: flex-end;
       margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border-color);
     }
 
-    .submit-actions button {
-      padding: 12px 24px;
-      font-size: 1rem;
+    .submit-btn {
+      background-color: var(--primary-color);
+      color: white;
+      padding: 12px 32px;
+      font-size: 1.1rem;
+    }
+
+    .cancel-btn {
+      color: var(--text-secondary);
+    }
+
+    .error-message {
+      color: var(--accent-color);
+      font-size: 0.9rem;
+      margin-top: 8px;
+    }
+
+    .success-message {
+      color: #4caf50;
+      font-size: 0.9rem;
+      margin-top: 8px;
     }
 
     @media (max-width: 768px) {
       .header-content,
-      .form-content {
+      .content-wrapper {
         padding: 0 16px;
       }
 
-      .header-info h1 {
+      .header-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .title-section h1 {
         font-size: 2rem;
       }
 
-      .form-card {
+      .poll-form {
         padding: 20px;
       }
 
@@ -510,11 +569,13 @@ import { formatDate } from '@angular/common';
         height: 100px;
       }
 
-      .submit-actions {
+      .form-actions {
         flex-direction: column;
+        align-items: stretch;
       }
 
-      .submit-actions button {
+      .submit-btn,
+      .cancel-btn {
         width: 100%;
       }
     }
@@ -526,6 +587,8 @@ export class CreatePollComponent implements OnInit {
     isSubmitting = false;
     coverFile: File | null = null;
     coverImagePreview: string | null = null;
+    successMessage: string = '';
+    errorMessage: string = '';
 
     constructor(
         private fb: FormBuilder,
@@ -667,11 +730,15 @@ export class CreatePollComponent implements OnInit {
 
             this.pollService.createPoll(pollData, images.length > 0 ? images : undefined, this.coverFile || undefined).subscribe({
                 next: (response) => {
+                    this.successMessage = '投票創建成功！';
+                    this.errorMessage = '';
                     this.snackBar.open('投票創建成功！', '關閉', { duration: 3000 });
                     this.router.navigate(['/polls', response.poll.id]);
                 },
                 error: (error) => {
                     console.error('Error creating poll:', error);
+                    this.errorMessage = '創建投票失敗，請稍後再試';
+                    this.successMessage = '';
                     this.snackBar.open('創建投票失敗，請稍後再試', '關閉', { duration: 3000 });
                     this.isSubmitting = false;
                 }

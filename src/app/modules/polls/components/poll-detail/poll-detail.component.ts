@@ -230,7 +230,7 @@ import { AuthService } from '../../../../services/auth.service';
     styles: [`
     .poll-detail-container {
       min-height: 100vh;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .loading-section {
@@ -239,9 +239,10 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .poll-header {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background-color: var(--background-white);
+      color: var(--text-primary);
       padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-content {
@@ -256,28 +257,29 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .back-button button {
-      color: white;
+      color: var(--text-secondary);
     }
 
     .poll-info h1 {
       margin: 0 0 16px 0;
       font-size: 2.5rem;
       font-weight: 300;
+      color: var(--text-primary);
     }
 
     .cover-image {
       width: 100%;
       max-height: 360px;
       object-fit: cover;
-      border-radius: 8px;
+      border-radius: 12px;
       margin-bottom: 16px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+      box-shadow: var(--shadow-medium);
     }
 
     .description {
       margin: 0 0 24px 0;
       font-size: 1.1rem;
-      opacity: 0.9;
+      color: var(--text-secondary);
       line-height: 1.6;
     }
 
@@ -293,13 +295,14 @@ import { AuthService } from '../../../../services/auth.service';
       align-items: center;
       gap: 8px;
       font-size: 0.9rem;
-      opacity: 0.8;
+      color: var(--text-secondary);
     }
 
     .meta-item mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
+      color: var(--primary-color);
     }
 
     .status-chip {
@@ -321,9 +324,10 @@ import { AuthService } from '../../../../services/auth.service';
     .poll-ended {
       text-align: center;
       padding: 48px 24px;
-      background: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: var(--background-white);
+      border-radius: 12px;
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
     .auth-required mat-icon,
@@ -334,37 +338,39 @@ import { AuthService } from '../../../../services/auth.service';
       height: 48px;
       margin-bottom: 16px;
       opacity: 0.6;
+      color: var(--text-secondary);
     }
 
     .auth-required h3,
     .already-voted h3,
     .poll-ended h3 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
     }
 
     .auth-required p,
     .already-voted p,
     .poll-ended p {
       margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .vote-options {
-      background: white;
-      border-radius: 8px;
+      background: var(--background-white);
+      border-radius: 12px;
       padding: 32px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
     .vote-options h3 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
     }
 
     .vote-options p {
       margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .options-grid {
@@ -375,26 +381,26 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .option-card {
-      border: 2px solid #e0e0e0;
+      border: 2px solid var(--border-color);
       border-radius: 12px;
       overflow: hidden;
       cursor: pointer;
       transition: all 0.3s ease;
       position: relative;
-      background: white;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      background: var(--background-white);
+      box-shadow: var(--shadow-light);
     }
 
     .option-card:hover {
-      border-color: #3f51b5;
+      border-color: var(--primary-color);
       transform: translateY(-4px);
-      box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-heavy);
     }
 
     .option-card.selected {
-      border-color: #3f51b5;
-      background-color: #f3f4ff;
-      box-shadow: 0 8px 25px rgba(63, 81, 181, 0.2);
+      border-color: var(--primary-color);
+      background-color: rgba(33, 150, 243, 0.04);
+      box-shadow: var(--shadow-medium);
     }
 
     .option-image-container {
@@ -446,14 +452,14 @@ import { AuthService } from '../../../../services/auth.service';
 
     .option-text h4 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.2rem;
       font-weight: 600;
     }
 
     .option-description {
       margin: 0;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
       font-size: 0.9rem;
     }
 
@@ -470,7 +476,7 @@ import { AuthService } from '../../../../services/auth.service';
       align-items: center;
       gap: 6px;
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.7);
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
@@ -479,12 +485,12 @@ import { AuthService } from '../../../../services/auth.service';
       font-size: 16px;
       width: 16px;
       height: 16px;
-      color: #3f51b5;
+      color: var(--primary-color);
     }
 
     .progress-bar {
       height: 4px;
-      background-color: #e0e0e0;
+      background-color: var(--border-color);
       border-radius: 2px;
       margin-top: 12px;
       overflow: hidden;
@@ -492,7 +498,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #3f51b5, #667eea);
+      background: var(--primary-color);
       transition: width 0.3s ease;
     }
 
@@ -503,7 +509,7 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .selection-indicator mat-icon {
-      color: #3f51b5;
+      color: var(--primary-color);
       font-size: 24px;
       width: 24px;
       height: 24px;
@@ -516,6 +522,8 @@ import { AuthService } from '../../../../services/auth.service';
     .vote-actions button {
       padding: 12px 32px;
       font-size: 1.1rem;
+      background-color: var(--primary-color);
+      color: white;
     }
 
     .results-section {
@@ -530,7 +538,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .results-content h3 {
       margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.5rem;
     }
 
@@ -541,17 +549,17 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .result-card {
-      background: white;
+      background: var(--background-white);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
       transition: all 0.3s ease;
-      border: 2px solid #e0e0e0;
+      border: 2px solid var(--border-color);
     }
 
     .result-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-medium);
     }
 
     .result-card.winner {
@@ -579,14 +587,14 @@ import { AuthService } from '../../../../services/auth.service';
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #3f51b5, #667eea);
+      background: var(--primary-color);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       font-size: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-medium);
     }
 
     .winner-badge {
@@ -600,7 +608,7 @@ import { AuthService } from '../../../../services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-medium);
     }
 
     .winner-badge mat-icon {
@@ -620,7 +628,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .result-header h4 {
       margin: 0 0 12px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.2rem;
       font-weight: 600;
     }
@@ -637,7 +645,7 @@ import { AuthService } from '../../../../services/auth.service';
       align-items: center;
       gap: 6px;
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.7);
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
@@ -646,12 +654,12 @@ import { AuthService } from '../../../../services/auth.service';
       font-size: 16px;
       width: 16px;
       height: 16px;
-      color: #3f51b5;
+      color: var(--primary-color);
     }
 
     .percentage {
       font-weight: bold;
-      color: #3f51b5;
+      color: var(--primary-color);
     }
 
     .result-progress {
@@ -670,7 +678,7 @@ import { AuthService } from '../../../../services/auth.service';
     .error-state {
       text-align: center;
       padding: 64px 24px;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .error-state mat-icon {
@@ -683,7 +691,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .error-state h3 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
     }
 
     .error-state p {

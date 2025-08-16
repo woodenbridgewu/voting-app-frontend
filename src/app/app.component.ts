@@ -81,13 +81,16 @@ import { AuthService, User } from './services/auth.service';
       min-height: 100vh;
       display: flex;
       flex-direction: column;
+      background-color: var(--background-light);
     }
 
     .app-header {
       position: sticky;
       top: 0;
       z-index: 1000;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      background-color: var(--background-white);
+      border-bottom: 1px solid var(--border-color);
+      box-shadow: var(--shadow-light);
     }
 
     .header-content {
@@ -106,6 +109,7 @@ import { AuthService, User } from './services/auth.service';
       gap: 8px;
       cursor: pointer;
       transition: opacity 0.2s;
+      color: var(--primary-color);
     }
 
     .logo-section:hover {
@@ -114,7 +118,8 @@ import { AuthService, User } from './services/auth.service';
 
     .app-title {
       font-size: 1.25rem;
-      font-weight: 500;
+      font-weight: 600;
+      color: var(--text-primary);
     }
 
     .nav-actions {
@@ -127,22 +132,26 @@ import { AuthService, User } from './services/auth.service';
       display: flex;
       align-items: center;
       gap: 4px;
+      color: var(--text-secondary);
+      font-weight: 500;
     }
 
     .nav-actions button.active {
-      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--primary-color);
+      background-color: rgba(33, 150, 243, 0.08);
     }
 
     .main-content {
       flex: 1;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .app-footer {
-      background-color: #333;
-      color: white;
+      background-color: var(--background-white);
+      color: var(--text-secondary);
       padding: 16px 0;
       margin-top: auto;
+      border-top: 1px solid var(--border-color);
     }
 
     .footer-content {
@@ -150,6 +159,7 @@ import { AuthService, User } from './services/auth.service';
       margin: 0 auto;
       padding: 0 16px;
       text-align: center;
+      font-size: 0.9rem;
     }
 
     .user-info {
@@ -160,16 +170,17 @@ import { AuthService, User } from './services/auth.service';
     .user-name {
       font-weight: 500;
       font-size: 0.9rem;
+      color: var(--text-primary);
     }
 
     .user-email {
       font-size: 0.8rem;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
       margin-top: 2px;
     }
 
     .logout-btn {
-      color: #f44336;
+      color: var(--accent-color);
     }
 
     @media (max-width: 768px) {

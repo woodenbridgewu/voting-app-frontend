@@ -202,7 +202,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     styles: [`
     .poll-stats-container {
       min-height: 100vh;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .loading-section {
@@ -211,9 +211,10 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     }
 
     .header-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background-color: var(--background-white);
+      color: var(--text-primary);
       padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-content {
@@ -228,19 +229,20 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     }
 
     .back-button button {
-      color: white;
+      color: var(--text-secondary);
     }
 
     .header-info h1 {
       margin: 0 0 8px 0;
       font-size: 2.5rem;
       font-weight: 300;
+      color: var(--text-primary);
     }
 
     .header-info p {
       margin: 0;
       font-size: 1.1rem;
-      opacity: 0.9;
+      color: var(--text-secondary);
     }
 
     .overview-section,
@@ -264,7 +266,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     .results-content h3,
     .daily-stats-content h3 {
       margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.5rem;
     }
 
@@ -275,10 +277,11 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     }
 
     .stat-card {
-      background: white;
-      border-radius: 8px;
+      background: var(--background-white);
+      border-radius: 12px;
       padding: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
       display: flex;
       align-items: center;
       gap: 16px;
@@ -288,7 +291,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       width: 60px;
       height: 60px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      background: var(--primary-color);
       display: flex;
       align-items: center;
       justify-content: center;
@@ -308,13 +311,13 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     .stat-value {
       font-size: 1.8rem;
       font-weight: bold;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       margin-bottom: 4px;
     }
 
     .stat-label {
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .charts-content {
@@ -324,15 +327,16 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     }
 
     .chart-card {
-      background: white;
-      border-radius: 8px;
+      background: var(--background-white);
+      border-radius: 12px;
       padding: 24px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
     .chart-card h3 {
       margin: 0 0 24px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.3rem;
     }
 
@@ -348,17 +352,17 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     }
 
     .result-card {
-      background: white;
+      background: var(--background-white);
       border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
       transition: all 0.3s ease;
-      border: 2px solid #e0e0e0;
+      border: 2px solid var(--border-color);
     }
 
     .result-card:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-medium);
     }
 
     .result-card.winner {
@@ -386,14 +390,14 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: linear-gradient(135deg, #3f51b5, #667eea);
+      background: var(--primary-color);
       color: white;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: bold;
       font-size: 1rem;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-medium);
     }
 
     .winner-badge {
@@ -407,7 +411,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       display: flex;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+      box-shadow: var(--shadow-medium);
     }
 
     .winner-badge mat-icon {
@@ -427,7 +431,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
 
     .result-header h4 {
       margin: 0 0 12px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
       font-size: 1.2rem;
       font-weight: 600;
     }
@@ -444,7 +448,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       align-items: center;
       gap: 6px;
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.7);
+      color: var(--text-secondary);
       font-weight: 500;
     }
 
@@ -453,12 +457,12 @@ import { PollService, PollStats } from '../../../../services/poll.service';
       font-size: 16px;
       width: 16px;
       height: 16px;
-      color: #3f51b5;
+      color: var(--primary-color);
     }
 
     .percentage {
       font-weight: bold;
-      color: #3f51b5;
+      color: var(--primary-color);
     }
 
     .result-progress {
@@ -466,10 +470,11 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     }
 
     .daily-table {
-      background: white;
-      border-radius: 8px;
+      background: var(--background-white);
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: var(--shadow-light);
+      border: 1px solid var(--border-color);
     }
 
     .daily-table .table-header {
@@ -483,15 +488,15 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     .table-header {
       display: grid;
       grid-template-columns: 1fr 100px 100px;
-      background-color: #f8f9fa;
-      border-bottom: 1px solid #e0e0e0;
+      background-color: var(--background-light);
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-cell {
       padding: 16px;
       font-weight: bold;
-      color: rgba(0,0,0,0.8);
-      border-right: 1px solid #e0e0e0;
+      color: var(--text-primary);
+      border-right: 1px solid var(--border-color);
     }
 
     .header-cell:last-child {
@@ -501,7 +506,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     .table-row {
       display: grid;
       grid-template-columns: 1fr 100px 100px;
-      border-bottom: 1px solid #e0e0e0;
+      border-bottom: 1px solid var(--border-color);
       transition: background-color 0.2s;
     }
 
@@ -510,14 +515,14 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     }
 
     .table-row:hover {
-      background-color: #f8f9fa;
+      background-color: var(--background-light);
     }
 
     .table-cell {
       padding: 16px;
       display: flex;
       align-items: center;
-      border-right: 1px solid #e0e0e0;
+      border-right: 1px solid var(--border-color);
     }
 
     .table-cell:last-child {
@@ -536,14 +541,14 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     .progress-bar {
       width: 100%;
       height: 8px;
-      background-color: #e0e0e0;
+      background-color: var(--border-color);
       border-radius: 4px;
       overflow: hidden;
     }
 
     .progress-fill {
       height: 100%;
-      background: linear-gradient(90deg, #3f51b5, #667eea);
+      background: var(--primary-color);
       transition: width 0.3s ease;
     }
 
@@ -559,7 +564,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
     .error-state {
       text-align: center;
       padding: 64px 24px;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .error-state mat-icon {
@@ -572,7 +577,7 @@ import { PollService, PollStats } from '../../../../services/poll.service';
 
     .error-state h3 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
     }
 
     .error-state p {

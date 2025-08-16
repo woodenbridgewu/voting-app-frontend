@@ -12,22 +12,24 @@ import { AuthService } from '../../../../services/auth.service';
       <!-- Header Section -->
       <div class="header-section">
         <div class="header-content">
-          <div class="back-button">
-            <button mat-icon-button (click)="goBack()">
-              <mat-icon>arrow_back</mat-icon>
-            </button>
-          </div>
-          
           <div class="header-info">
-            <h1>我的投票</h1>
-            <p>管理您創建的所有投票</p>
-          </div>
+            <div class="back-button">
+              <button mat-icon-button (click)="goBack()">
+                <mat-icon>arrow_back</mat-icon>
+              </button>
+            </div>
+            
+            <div class="title-section">
+              <h1>我的投票</h1>
+              <p>管理您創建的所有投票</p>
+            </div>
 
-          <div class="header-actions">
-            <button mat-raised-button color="primary" routerLink="/polls/create">
-              <mat-icon>add</mat-icon>
-              創建新投票
-            </button>
+            <div class="header-actions">
+              <button mat-raised-button color="primary" routerLink="/polls/create">
+                <mat-icon>add</mat-icon>
+                創建新投票
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -127,50 +129,57 @@ import { AuthService } from '../../../../services/auth.service';
     styles: [`
     .my-polls-container {
       min-height: 100vh;
-      background-color: #f5f5f5;
+      background-color: var(--background-light);
     }
 
     .header-section {
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
+      background-color: var(--background-white);
+      color: var(--text-primary);
       padding: 32px 0;
+      border-bottom: 1px solid var(--border-color);
     }
 
     .header-content {
       max-width: 1200px;
       margin: 0 auto;
       padding: 0 24px;
-      position: relative;
-    }
-
-    .back-button {
-      margin-bottom: 16px;
-    }
-
-    .back-button button {
-      color: white;
     }
 
     .header-info {
-      margin-bottom: 24px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
     }
 
-    .header-info h1 {
+    .back-button {
+      flex-shrink: 0;
+    }
+
+    .back-button button {
+      color: var(--text-secondary);
+    }
+
+    .title-section {
+      flex: 1;
+    }
+
+    .title-section h1 {
       margin: 0 0 8px 0;
       font-size: 2.5rem;
-      font-weight: 300;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.2;
     }
 
-    .header-info p {
+    .title-section p {
       margin: 0;
       font-size: 1.1rem;
-      opacity: 0.9;
+      color: var(--text-secondary);
+      font-weight: 400;
     }
 
     .header-actions {
-      position: absolute;
-      top: 0;
-      right: 24px;
+      flex-shrink: 0;
     }
 
     .content-section {
@@ -198,15 +207,17 @@ import { AuthService } from '../../../../services/auth.service';
     .poll-card {
       transition: transform 0.2s, box-shadow 0.2s;
       height: fit-content;
+      background-color: var(--background-white);
+      border: 1px solid var(--border-color);
     }
 
     .poll-card:hover {
       transform: translateY(-4px);
-      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      box-shadow: var(--shadow-heavy);
     }
 
     .poll-avatar {
-      background-color: #3f51b5;
+      background-color: var(--primary-color);
       color: white;
       display: flex;
       align-items: center;
@@ -215,7 +226,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .poll-description {
       margin: 0 0 16px 0;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
       line-height: 1.5;
       display: -webkit-box;
       -webkit-line-clamp: 2;
@@ -235,13 +246,14 @@ import { AuthService } from '../../../../services/auth.service';
       align-items: center;
       gap: 4px;
       font-size: 0.9rem;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .stat-item mat-icon {
       font-size: 18px;
       width: 18px;
       height: 18px;
+      color: var(--primary-color);
     }
 
     .status-indicator {
@@ -251,7 +263,7 @@ import { AuthService } from '../../../../services/auth.service';
     .empty-state {
       text-align: center;
       padding: 64px 32px;
-      color: rgba(0,0,0,0.6);
+      color: var(--text-secondary);
     }
 
     .empty-state mat-icon {
@@ -264,7 +276,7 @@ import { AuthService } from '../../../../services/auth.service';
 
     .empty-state h3 {
       margin: 0 0 8px 0;
-      color: rgba(0,0,0,0.8);
+      color: var(--text-primary);
     }
 
     .empty-state p {
@@ -281,13 +293,22 @@ import { AuthService } from '../../../../services/auth.service';
         padding: 0 16px;
       }
 
-      .header-info h1 {
+      .header-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 16px;
+      }
+
+      .title-section h1 {
         font-size: 2rem;
       }
 
       .header-actions {
-        position: static;
-        margin-top: 16px;
+        align-self: stretch;
+      }
+
+      .header-actions button {
+        width: 100%;
       }
 
       .polls-grid {
