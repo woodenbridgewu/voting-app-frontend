@@ -27,13 +27,13 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
-        path: ':id',
-        component: PollDetailComponent
-    },
-    {
         path: ':id/stats',
         component: PollStatsComponent,
         canActivate: [AuthGuard]
+    },
+    {
+        path: ':id',
+        component: PollDetailComponent
     }
 ];
 

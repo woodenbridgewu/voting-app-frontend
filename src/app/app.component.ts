@@ -17,15 +17,15 @@ import { AuthService, User } from './services/auth.service';
           
           <div class="nav-actions">
             <ng-container *ngIf="isAuthenticated$ | async; else authButtons">
-              <button mat-button routerLink="/polls" routerLinkActive="active">
+              <button mat-button routerLink="/polls" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <mat-icon>list</mat-icon>
                 所有投票
               </button>
-              <button mat-button routerLink="/polls/my" routerLinkActive="active">
+              <button mat-button routerLink="/polls/my" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <mat-icon>person</mat-icon>
                 我的投票
               </button>
-              <button mat-button routerLink="/polls/create" routerLinkActive="active">
+              <button mat-button routerLink="/polls/create" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                 <mat-icon>add</mat-icon>
                 創建投票
               </button>
