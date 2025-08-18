@@ -209,6 +209,7 @@ import { AuthService } from '../../../../services/auth.service';
       height: fit-content;
       background-color: var(--background-white);
       border: 1px solid var(--border-color);
+      overflow: hidden;
     }
 
     .poll-card:hover {
@@ -222,6 +223,16 @@ import { AuthService } from '../../../../services/auth.service';
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+
+    /* Fix images breaking layout: enforce aspect and crop nicely */
+    .poll-card img.mat-card-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      object-position: center;
+      background-color: var(--background-light);
+      display: block;
     }
 
     .poll-description {
