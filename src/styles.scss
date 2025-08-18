@@ -78,3 +78,13 @@ body {
   --shadow-medium: 0 4px 16px rgba(0, 0, 0, 0.1);
   --shadow-heavy: 0 8px 24px rgba(0, 0, 0, 0.12);
 } 
+
+/* Center all Angular Material paginators horizontally */
+.mat-mdc-paginator {
+  background: transparent;
+}
+
+.mat-mdc-paginator .mat-mdc-paginator-container {
+  display: flex;
+  justify-content: center !important;
+}
