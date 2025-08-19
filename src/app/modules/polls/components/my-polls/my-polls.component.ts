@@ -199,9 +199,9 @@ import { AuthService } from '../../../../services/auth.service';
 
     .polls-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
       gap: 24px;
-      margin-bottom: 32px;
+      margin-bottom: 24px;
+      justify-content: center;
     }
 
     .poll-card {
@@ -210,6 +210,7 @@ import { AuthService } from '../../../../services/auth.service';
       background-color: var(--background-white);
       border: 1px solid var(--border-color);
       overflow: hidden;
+      cursor: pointer;
     }
 
     .poll-card:hover {
@@ -228,11 +229,34 @@ import { AuthService } from '../../../../services/auth.service';
     /* Fix images breaking layout: enforce aspect and crop nicely */
     .poll-card img.mat-card-image {
       width: 100%;
-      height: 200px;
+      height: 140px;
       object-fit: cover;
       object-position: center;
       background-color: var(--background-light);
       display: block;
+    }
+
+    /* Compact card paddings */
+    .poll-card .mat-mdc-card-header {
+      padding: 12px 16px;
+    }
+
+    .poll-card .mat-mdc-card-content {
+      padding: 0 16px 12px 16px;
+    }
+
+    .poll-card .mat-mdc-card-actions {
+      padding: 8px 12px;
+    }
+
+    /* Compact typography */
+    .poll-card mat-card-title {
+      font-size: 1.1rem;
+      line-height: 1.3;
+    }
+
+    .poll-card mat-card-subtitle {
+      font-size: 0.9rem;
     }
 
     .poll-description {
@@ -248,22 +272,22 @@ import { AuthService } from '../../../../services/auth.service';
     .poll-stats {
       display: flex;
       flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 16px;
+      gap: 12px;
+      margin-bottom: 12px;
     }
 
     .stat-item {
       display: flex;
       align-items: center;
       gap: 4px;
-      font-size: 0.9rem;
+      font-size: 0.85rem;
       color: var(--text-secondary);
     }
 
     .stat-item mat-icon {
-      font-size: 18px;
-      width: 18px;
-      height: 18px;
+      font-size: 16px;
+      width: 16px;
+      height: 16px;
       color: var(--primary-color);
     }
 
@@ -296,8 +320,27 @@ import { AuthService } from '../../../../services/auth.service';
 
     mat-paginator {
       background-color: transparent;
-      margin-top: 32px;
+      margin-top: 24px;
     }
+
+    /* Large screens: max 3 columns with fixed column width */
+    @media (min-width: 1200px) {
+      .polls-grid {
+        grid-template-columns: repeat(3, minmax(280px, 320px));
+        justify-content: center;
+      }
+    }
+
+    /* Medium screens: 2 columns, centered */
+    @media (min-width: 768px) and (max-width: 1199px) {
+      .polls-grid {
+        grid-template-columns: repeat(2, minmax(280px, 320px));
+        justify-content: center;
+        gap: 20px;
+      }
+    }
+
+    
 
     @media (max-width: 768px) {
       .header-content {
@@ -323,13 +366,28 @@ import { AuthService } from '../../../../services/auth.service';
       }
 
       .polls-grid {
-        grid-template-columns: 1fr;
-        gap: 16px;
+        grid-template-columns: repeat(1, minmax(260px, 320px));
+        justify-content: center;
+        gap: 12px;
       }
 
       .content-wrapper {
         padding: 0 16px;
       }
+
+      .poll-card img.mat-card-image {
+        height: 110px;
+      }
+
+      .poll-card mat-card-title {
+        font-size: 1rem;
+      }
+    }
+
+    /* Ensure cards do not stretch too wide in any column */
+    .poll-card {
+      max-width: 320px;
+      width: 100%;
     }
   `]
 })
