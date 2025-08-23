@@ -103,7 +103,8 @@ import { AuthService } from '../../../../services/auth.service';
                   <div class="option-content">
                     <div class="option-text">
                       <h4>{{ option.text }}</h4>
-                      <p class="option-description">點擊選擇此選項</p>
+                      <p *ngIf="option.description" class="option-description">{{ option.description }}</p>
+                      <p *ngIf="!option.description" class="option-description">點擊選擇此選項</p>
                     </div>
                     
                     <div class="option-stats">
@@ -177,6 +178,7 @@ import { AuthService } from '../../../../services/auth.service';
                 <div class="result-content">
                   <div class="result-header">
                     <h4>{{ option.text }}</h4>
+                    <p *ngIf="option.description" class="result-description">{{ option.description }}</p>
                     <div class="vote-details">
                       <div class="vote-count">
                         <mat-icon>how_to_vote</mat-icon>
@@ -627,10 +629,17 @@ import { AuthService } from '../../../../services/auth.service';
     }
 
     .result-header h4 {
-      margin: 0 0 12px 0;
+      margin: 0 0 8px 0;
       color: var(--text-primary);
       font-size: 1.2rem;
       font-weight: 600;
+    }
+
+    .result-description {
+      margin: 0 0 12px 0;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.4;
     }
 
     .vote-details {

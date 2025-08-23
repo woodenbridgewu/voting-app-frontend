@@ -3,10 +3,18 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 
+export interface PollOptionImage {
+    url: string;
+    isPrimary: boolean;
+    displayOrder: number;
+}
+
 export interface PollOption {
     id: string;
     text: string;
+    description?: string;
     imageUrl?: string;
+    images?: PollOptionImage[];
     voteCount: number;
     percentage?: number;
 }
@@ -30,7 +38,8 @@ export interface Poll {
 
 export interface CreatePollOption {
     text: string;
-    hasImage?: boolean;
+    description?: string;
+    imageCount?: number;
 }
 
 export interface CreatePollRequest {

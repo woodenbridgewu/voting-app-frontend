@@ -129,46 +129,69 @@ import { formatDate } from '@angular/common';
                     </div>
 
                     <div class="option-content">
-                      <mat-form-field appearance="outline" class="option-text-field">
-                        <mat-label>選項文字 *</mat-label>
-                        <input matInput formControlName="text" 
-                               [placeholder]="'選項 ' + (i + 1) + ' 的文字'">
-                        <mat-error *ngIf="option.get('text')?.hasError('required')">
-                          選項文字為必填項目
-                        </mat-error>
-                      </mat-form-field>
+                      <div class="option-text-section">
+                        <mat-form-field appearance="outline" class="option-text-field">
+                          <mat-label>選項文字 *</mat-label>
+                          <input matInput formControlName="text" 
+                                 [placeholder]="'選項 ' + (i + 1) + ' 的文字'">
+                          <mat-error *ngIf="option.get('text')?.hasError('required')">
+                            選項文字為必填項目
+                          </mat-error>
+                        </mat-form-field>
+
+                        <mat-form-field appearance="outline" class="option-description-field">
+                          <mat-label>選項說明（可選）</mat-label>
+                          <textarea matInput formControlName="description" 
+                                   [placeholder]="'選項 ' + (i + 1) + ' 的說明'"
+                                   rows="2"></textarea>
+                          <mat-error *ngIf="option.get('description')?.hasError('maxlength')">
+                            說明不能超過 500 個字元
+                          </mat-error>
+                        </mat-form-field>
+                      </div>
 
                       <div class="image-upload-section">
-                        <div class="upload-area" 
-                             [class.has-image]="optionImages[i]"
-                             (click)="triggerImageUpload(i)">
-                          
-                          <div *ngIf="!optionImages[i]" class="upload-placeholder">
+                        <div class="images-header">
+                          <h4>圖片（最多10張）</h4>
+                          <button *ngIf="optionImages[i] && optionImages[i].length < 10" 
+                                  type="button" 
+                                  mat-button 
+                                  color="primary" 
+                                  (click)="triggerOptionImageUpload(i)"
+                                  class="add-image-btn">
                             <mat-icon>add_photo_alternate</mat-icon>
-                            <span>新增圖片（可選）</span>
-                          </div>
-                          
-                          <img *ngIf="optionImages[i]" 
-                               [src]="optionImages[i]" 
-                               [alt]="'選項 ' + (i + 1) + ' 圖片'"
-                               class="image-preview">
-                          
-                          <input #fileInput type="file" 
-                                 [id]="'file-' + i"
-                                 accept="image/*"
-                                 (change)="onImageSelected($event, i)"
-                                 style="display: none;">
+                            新增圖片
+                          </button>
                         </div>
-                        
-                        <button *ngIf="optionImages[i]" 
-                                type="button" 
-                                mat-button 
-                                color="warn" 
-                                (click)="removeImage(i)"
-                                class="upload-button">
-                          <mat-icon>delete</mat-icon>
-                          移除圖片
-                        </button>
+
+                        <input type="file" 
+                               [id]="'option-image-upload-' + i"
+                               accept="image/*"
+                               (change)="onOptionImageSelected($event, i)"
+                               style="display: none;">
+
+                        <div class="images-grid" *ngIf="optionImages[i] && optionImages[i].length > 0">
+                          <div *ngFor="let image of optionImages[i]; let imgIndex = index" 
+                               class="image-item">
+                            <img [src]="image!" 
+                                 [alt]="'選項 ' + (i + 1) + ' 圖片 ' + (imgIndex + 1)"
+                                 class="image-preview">
+                            <button type="button" 
+                                    mat-icon-button 
+                                    color="warn" 
+                                    (click)="removeImageFromOption(i, imgIndex)"
+                                    class="remove-image-btn">
+                              <mat-icon>close</mat-icon>
+                            </button>
+                          </div>
+                        </div>
+
+                        <div *ngIf="!optionImages[i] || optionImages[i].length === 0" 
+                             class="upload-placeholder"
+                             (click)="triggerOptionImageUpload(i)">
+                          <mat-icon>add_photo_alternate</mat-icon>
+                          <span>點擊新增圖片</span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -365,51 +388,102 @@ import { formatDate } from '@angular/common';
     .option-content {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 16px;
+      gap: 24px;
       align-items: start;
     }
 
-    .option-text-field {
+    .option-text-section {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .option-text-field,
+    .option-description-field {
       width: 100%;
     }
 
     .image-upload-section {
       display: flex;
       flex-direction: column;
-      gap: 8px;
-      min-width: 120px;
+      gap: 12px;
+      min-width: 200px;
     }
 
-    .upload-area {
-      width: 120px;
+    .images-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .images-header h4 {
+      margin: 0;
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .add-image-btn {
+      font-size: 0.8rem;
+      padding: 4px 8px;
+    }
+
+    .images-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+      gap: 8px;
+      max-width: 300px;
+    }
+
+    .image-item {
+      position: relative;
+      width: 80px;
+      height: 80px;
+      border-radius: 8px;
+      overflow: hidden;
+      border: 2px solid var(--border-color);
+    }
+
+    .image-item .image-preview {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .remove-image-btn {
+      position: absolute;
+      top: 2px;
+      right: 2px;
+      background: rgba(255, 255, 255, 0.9);
+      width: 20px;
+      height: 20px;
+      line-height: 20px;
+    }
+
+    .remove-image-btn mat-icon {
+      font-size: 14px;
+      width: 14px;
+      height: 14px;
+      line-height: 14px;
+    }
+
+    .upload-placeholder {
+      width: 200px;
       height: 120px;
       border: 2px dashed var(--border-color);
       border-radius: 8px;
       display: flex;
+      flex-direction: column;
       align-items: center;
       justify-content: center;
       cursor: pointer;
       transition: all 0.2s;
-      overflow: hidden;
       background-color: var(--background-light);
+      color: var(--text-secondary);
     }
 
-    .upload-area:hover {
+    .upload-placeholder:hover {
       border-color: var(--primary-color);
       background-color: rgba(33, 150, 243, 0.04);
-    }
-
-    .upload-area.has-image {
-      border-style: solid;
-      border-color: var(--primary-color);
-    }
-
-    .upload-placeholder {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 8px;
-      color: var(--text-secondary);
     }
 
     .upload-placeholder mat-icon {
@@ -421,18 +495,7 @@ import { formatDate } from '@angular/common';
     .upload-placeholder span {
       font-size: 0.8rem;
       text-align: center;
-    }
-
-    .image-preview {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .upload-button {
-      font-size: 0.8rem;
-      padding: 4px 8px;
-      min-width: 80px;
+      margin-top: 8px;
     }
 
     .cover-upload-area {
@@ -561,11 +624,25 @@ import { formatDate } from '@angular/common';
 
       .option-content {
         grid-template-columns: 1fr;
-        gap: 12px;
+        gap: 16px;
       }
 
-      .upload-area {
-        width: 100px;
+      .image-upload-section {
+        min-width: auto;
+      }
+
+      .images-grid {
+        max-width: none;
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+      }
+
+      .image-item {
+        width: 60px;
+        height: 60px;
+      }
+
+      .upload-placeholder {
+        width: 100%;
         height: 100px;
       }
 
@@ -583,7 +660,7 @@ import { formatDate } from '@angular/common';
 })
 export class CreatePollComponent implements OnInit {
     pollForm: FormGroup;
-    optionImages: (string | null)[] = [];
+    optionImages: (string | null)[][] = []; // Array of arrays for multiple images per option
     isSubmitting = false;
     coverFile: File | null = null;
     coverImagePreview: string | null = null;
@@ -603,11 +680,11 @@ export class CreatePollComponent implements OnInit {
             options: this.fb.array([
                 this.fb.group({
                     text: ['', Validators.required],
-                    hasImage: [false]
+                    description: ['', [Validators.maxLength(500)]]
                 }),
                 this.fb.group({
                     text: ['', Validators.required],
-                    hasImage: [false]
+                    description: ['', [Validators.maxLength(500)]]
                 })
             ])
         });
@@ -615,7 +692,7 @@ export class CreatePollComponent implements OnInit {
 
     ngOnInit() {
         // Initialize option images array
-        this.optionImages = new Array(this.optionsArray.length).fill(null);
+        this.optionImages = new Array(this.optionsArray.length).fill(null).map(() => []);
     }
 
     get optionsArray() {
@@ -625,10 +702,10 @@ export class CreatePollComponent implements OnInit {
     addOption() {
         const option = this.fb.group({
             text: ['', Validators.required],
-            hasImage: [false]
+            description: ['', [Validators.maxLength(500)]]
         });
         this.optionsArray.push(option);
-        this.optionImages.push(null);
+        this.optionImages.push([]);
     }
 
     removeOption(index: number) {
@@ -638,17 +715,18 @@ export class CreatePollComponent implements OnInit {
         }
     }
 
-    triggerImageUpload(index: number) {
-        const fileInput = document.getElementById(`file-${index}`) as HTMLInputElement;
-        fileInput?.click();
+    removeImageFromOption(optionIndex: number, imageIndex: number) {
+        this.optionImages[optionIndex].splice(imageIndex, 1);
     }
 
-    triggerCoverUpload() {
-        const fileInput = document.getElementById('cover-file') as HTMLInputElement;
-        fileInput?.click();
+    triggerOptionImageUpload(optionIndex: number) {
+        if (this.optionImages[optionIndex].length < 10) {
+            const fileInput = document.getElementById(`option-image-upload-${optionIndex}`) as HTMLInputElement;
+            fileInput?.click();
+        }
     }
 
-    onImageSelected(event: any, index: number) {
+    onOptionImageSelected(event: any, optionIndex: number) {
         const file = event.target.files[0];
         if (file) {
             if (file.size > 5 * 1024 * 1024) { // 5MB limit
@@ -658,20 +736,21 @@ export class CreatePollComponent implements OnInit {
 
             const reader = new FileReader();
             reader.onload = (e: any) => {
-                this.optionImages[index] = e.target.result;
-                this.optionsArray.at(index).patchValue({ hasImage: true });
+                if (this.optionImages[optionIndex].length < 10) {
+                    this.optionImages[optionIndex].push(e.target.result);
+                }
             };
             reader.readAsDataURL(file);
+
+            // Reset file input to allow selecting the same file again
+            const input = event.target as HTMLInputElement;
+            input.value = '';
         }
     }
 
-    removeImage(index: number) {
-        this.optionImages[index] = null;
-        this.optionsArray.at(index).patchValue({ hasImage: false });
-        const fileInput = document.getElementById(`file-${index}`) as HTMLInputElement;
-        if (fileInput) {
-            fileInput.value = '';
-        }
+    triggerCoverUpload() {
+        const fileInput = document.getElementById('cover-file') as HTMLInputElement;
+        fileInput?.click();
     }
 
     onCoverSelected(event: any) {
@@ -707,25 +786,28 @@ export class CreatePollComponent implements OnInit {
                 endDate: formValue.endDate ? formatDate(formValue.endDate, 'yyyy-MM-dd', 'en-US') : undefined,
                 options: formValue.options.map((option: any, index: number) => ({
                     text: option.text,
-                    hasImage: this.optionImages[index] !== null
+                    description: option.description || undefined,
+                    imageCount: this.optionImages[index].filter(img => img !== null).length
                 }))
             };
 
             // Prepare images for upload
             const images: File[] = [];
-            this.optionImages.forEach((imageData, index) => {
-                if (imageData) {
-                    // Convert base64 to file
-                    const byteString = atob(imageData.split(',')[1]);
-                    const mimeString = imageData.split(',')[0].split(':')[1].split(';')[0];
-                    const ab = new ArrayBuffer(byteString.length);
-                    const ia = new Uint8Array(ab);
-                    for (let i = 0; i < byteString.length; i++) {
-                        ia[i] = byteString.charCodeAt(i);
+            this.optionImages.forEach((imageArray, optionIndex) => {
+                imageArray.forEach((imageData, imageIndex) => {
+                    if (imageData) {
+                        // Convert base64 to file
+                        const byteString = atob(imageData.split(',')[1]);
+                        const mimeString = imageData.split(',')[0].split(':')[1].split(';')[0];
+                        const ab = new ArrayBuffer(byteString.length);
+                        const ia = new Uint8Array(ab);
+                        for (let i = 0; i < byteString.length; i++) {
+                            ia[i] = byteString.charCodeAt(i);
+                        }
+                        const file = new File([ab], `option-${optionIndex}-${imageIndex}.jpg`, { type: mimeString });
+                        images.push(file);
                     }
-                    const file = new File([ab], `option-${index}.jpg`, { type: mimeString });
-                    images.push(file);
-                }
+                });
             });
 
             this.pollService.createPoll(pollData, images.length > 0 ? images : undefined, this.coverFile || undefined).subscribe({
@@ -749,4 +831,4 @@ export class CreatePollComponent implements OnInit {
     goBack() {
         this.router.navigate(['/polls']);
     }
-} 
+}
