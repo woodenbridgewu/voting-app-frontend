@@ -117,6 +117,13 @@ import { AuthService } from '../../../../services/auth.service';
                         <span>{{ option.percentage || 0 }}%</span>
                       </div>
                     </div>
+
+                    <div class="option-actions">
+                      <button mat-stroked-button color="primary" (click)="viewOptionDetails(option.id, $event)">
+                        <mat-icon>visibility</mat-icon>
+                        查看詳情
+                      </button>
+                    </div>
                   </div>
                   
                   <div class="progress-bar">
@@ -488,6 +495,12 @@ import { AuthService } from '../../../../services/auth.service';
       width: 16px;
       height: 16px;
       color: var(--primary-color);
+    }
+
+    .option-actions {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border-color);
     }
 
     .progress-bar {
@@ -863,6 +876,11 @@ export class PollDetailComponent implements OnInit {
                 this.isVoting = false;
             }
         });
+    }
+
+    viewOptionDetails(optionId: string, event: MouseEvent) {
+        event.stopPropagation(); // Prevent the card's click event
+        this.router.navigate(['/polls', this.poll?.id, 'options', optionId]);
     }
 
     goBack() {

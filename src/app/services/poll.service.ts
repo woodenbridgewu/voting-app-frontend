@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { environment } from '../../environments/environment';
 
 export interface PollOptionImage {
@@ -11,6 +12,7 @@ export interface PollOptionImage {
 
 export interface PollOption {
     id: string;
+    pollId?: string; // Added for standalone option view
     text: string;
     description?: string;
     imageUrl?: string;
@@ -153,6 +155,18 @@ export class PollService {
 
     getPoll(id: string): Observable<{ poll: Poll }> {
         return this.http.get<{ poll: Poll }>(`${this.API_URL}/polls/${id}`);
+    }
+
+    getPollOption(pollId: string, optionId: string): Observable<PollOption> {
+        return this.http.get<any>(`${this.API_URL}/polls/${pollId}/options/${optionId}`).pipe(
+            map(response => {
+                if (response.poll_id) {
+                    response.pollId = response.poll_id;
+                    delete response.poll_id;
+                }
+                return response;
+            })
+        );
     }
 
     getMyPolls(params?: { page?: number; limit?: number }): Observable<PaginatedResponse<Poll>> {

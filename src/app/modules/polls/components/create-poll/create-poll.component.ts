@@ -153,27 +153,21 @@ import { formatDate } from '@angular/common';
                       <div class="image-upload-section">
                         <div class="images-header">
                           <h4>圖片（最多10張）</h4>
-                          <button *ngIf="optionImages[i] && optionImages[i].length < 10" 
+                          <button *ngIf="optionImages[i].length < 10" 
                                   type="button" 
                                   mat-button 
                                   color="primary" 
-                                  (click)="triggerOptionImageUpload(i)"
+                                  (click)="addImageToOption(i)"
                                   class="add-image-btn">
                             <mat-icon>add_photo_alternate</mat-icon>
                             新增圖片
                           </button>
                         </div>
 
-                        <input type="file" 
-                               [id]="'option-image-upload-' + i"
-                               accept="image/*"
-                               (change)="onOptionImageSelected($event, i)"
-                               style="display: none;">
-
-                        <div class="images-grid" *ngIf="optionImages[i] && optionImages[i].length > 0">
+                        <div class="images-grid" *ngIf="optionImages[i].length > 0">
                           <div *ngFor="let image of optionImages[i]; let imgIndex = index" 
                                class="image-item">
-                            <img [src]="image!" 
+                            <img [src]="image" 
                                  [alt]="'選項 ' + (i + 1) + ' 圖片 ' + (imgIndex + 1)"
                                  class="image-preview">
                             <button type="button" 
@@ -183,12 +177,17 @@ import { formatDate } from '@angular/common';
                                     class="remove-image-btn">
                               <mat-icon>close</mat-icon>
                             </button>
+                            <input type="file" 
+                                   [id]="'file-' + i + '-' + imgIndex"
+                                   accept="image/*"
+                                   (change)="onImageSelected($event, i, imgIndex)"
+                                   style="display: none;">
                           </div>
                         </div>
 
-                        <div *ngIf="!optionImages[i] || optionImages[i].length === 0" 
+                        <div *ngIf="optionImages[i].length === 0" 
                              class="upload-placeholder"
-                             (click)="triggerOptionImageUpload(i)">
+                             (click)="addImageToOption(i)">
                           <mat-icon>add_photo_alternate</mat-icon>
                           <span>點擊新增圖片</span>
                         </div>
@@ -715,18 +714,28 @@ export class CreatePollComponent implements OnInit {
         }
     }
 
-    removeImageFromOption(optionIndex: number, imageIndex: number) {
-        this.optionImages[optionIndex].splice(imageIndex, 1);
-    }
-
-    triggerOptionImageUpload(optionIndex: number) {
+    addImageToOption(optionIndex: number) {
         if (this.optionImages[optionIndex].length < 10) {
-            const fileInput = document.getElementById(`option-image-upload-${optionIndex}`) as HTMLInputElement;
+            const fileInput = document.getElementById(`file-${optionIndex}-${this.optionImages[optionIndex].length}`) as HTMLInputElement;
             fileInput?.click();
         }
     }
 
-    onOptionImageSelected(event: any, optionIndex: number) {
+    removeImageFromOption(optionIndex: number, imageIndex: number) {
+        this.optionImages[optionIndex].splice(imageIndex, 1);
+    }
+
+    triggerImageUpload(index: number) {
+        // This method is now deprecated, use addImageToOption instead
+        this.addImageToOption(index);
+    }
+
+    triggerCoverUpload() {
+        const fileInput = document.getElementById('cover-file') as HTMLInputElement;
+        fileInput?.click();
+    }
+
+    onImageSelected(event: any, optionIndex: number, imageIndex: number) {
         const file = event.target.files[0];
         if (file) {
             if (file.size > 5 * 1024 * 1024) { // 5MB limit
@@ -736,21 +745,15 @@ export class CreatePollComponent implements OnInit {
 
             const reader = new FileReader();
             reader.onload = (e: any) => {
-                if (this.optionImages[optionIndex].length < 10) {
-                    this.optionImages[optionIndex].push(e.target.result);
-                }
+                this.optionImages[optionIndex][imageIndex] = e.target.result;
             };
             reader.readAsDataURL(file);
-
-            // Reset file input to allow selecting the same file again
-            const input = event.target as HTMLInputElement;
-            input.value = '';
         }
     }
 
-    triggerCoverUpload() {
-        const fileInput = document.getElementById('cover-file') as HTMLInputElement;
-        fileInput?.click();
+    removeImage(index: number) {
+        // This method is now deprecated, use removeImageFromOption instead
+        this.removeImageFromOption(index, 0);
     }
 
     onCoverSelected(event: any) {
@@ -831,4 +834,4 @@ export class CreatePollComponent implements OnInit {
     goBack() {
         this.router.navigate(['/polls']);
     }
-}
+} 

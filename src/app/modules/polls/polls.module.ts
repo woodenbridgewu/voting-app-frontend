@@ -32,6 +32,10 @@ const routes: Routes = [
         canActivate: [AuthGuard]
     },
     {
+        path: ':pollId/options/:optionId',
+        loadComponent: () => import('./components/option-detail/option-detail.component').then(m => m.OptionDetailComponent)
+    },
+    {
         path: ':id',
         component: PollDetailComponent
     }
