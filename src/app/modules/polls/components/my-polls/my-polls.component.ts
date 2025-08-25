@@ -12,13 +12,7 @@ import { AuthService } from '../../../../services/auth.service';
       <!-- Header Section -->
       <div class="header-section">
         <div class="header-content">
-          <div class="header-info">
-            <div class="back-button">
-              <button mat-icon-button (click)="goBack()">
-                <mat-icon>arrow_back</mat-icon>
-              </button>
-            </div>
-            
+          <div class="header-info">            
             <div class="title-section">
               <h1>我的投票</h1>
               <p>管理您創建的所有投票</p>

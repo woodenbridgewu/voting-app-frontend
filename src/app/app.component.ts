@@ -61,7 +61,7 @@ import { AuthService, User } from './services/auth.service';
             
             <ng-template #authButtons>
               <button mat-button routerLink="/auth/login">登入</button>
-              <button mat-raised-button color="accent" routerLink="/auth/register">註冊</button>
+              <button mat-button routerLink="/auth/register">註冊</button>
             </ng-template>
           </div>
 

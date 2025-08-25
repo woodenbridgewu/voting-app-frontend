@@ -13,12 +13,6 @@ import { formatDate } from '@angular/common';
       <div class="header-section">
         <div class="header-content">
           <div class="header-info">
-            <div class="back-button">
-              <button mat-icon-button (click)="goBack()">
-                <mat-icon>arrow_back</mat-icon>
-              </button>
-            </div>
-            
             <div class="title-section">
               <h1>創建新投票</h1>
               <p>設計您的投票，讓社群參與決策</p>
